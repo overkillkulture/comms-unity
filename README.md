@@ -1,81 +1,137 @@
-# Munia 
+# COMMS-UNITY
 
-A responsive and accessible full stack social media web app.
+**Communications + Unity + Community**
 
-## Preview 🎬
+An open source social platform built for the Builder Revolution. This is a fort. Help us turn it into a castle.
 
-[![Watch the showcase](https://norcio-dot-dev-public-files.s3.us-east-1.amazonaws.com/munia/showcase-thumbnail.png)](https://norcio-dot-dev-public-files.s3.us-east-1.amazonaws.com/munia/showcase.mp4)
+**Live:** [comms-unity-production.up.railway.app](https://comms-unity-production.up.railway.app)
 
+---
 
-## Features ✨
+## What Is This
 
-- Email and OAuth 2.0 login (Github, Google and Facebook)
-- Users can update their info, profile photo and cover photo
-- Create, update and delete posts, comments and replies
-- Like and unlike posts, comments and replies
-- Images and videos can be added to posts
-- Drag and drop sorting of images and videos when creating and editing a post
-- Hashtags can be added to posts
-- Users can @ mention other users in their posts, comments and replies
-- Bidirectional infinite scrolling of posts
-- Follow and unfollow other users
-- Search users with filters
-- Display, search and filter a user's followers and following list
-- Activity logging and notifications
-- Gallery of user's uploaded photos and videos
-- Full-page image and videos slider
-- Accessible components
-- Fully responsive design
-- Dark and light themes
+A full-stack community platform where builders connect, share work, and level up together. Think Instagram meets Discord meets a builder marketplace — but open source and owned by nobody.
 
-> [!NOTE]  
-> This project is a work in progress, it still contains bugs and will constantly be updated to stay up-to-date with the latest framework changes.
+We forked [Munia](https://github.com/leandronorcio/munia) (MIT license), ripped it apart, and rebuilt it for builders of all kinds — not just developers. Welders, lawyers, artists, systems thinkers, grandmothers who understand pattern theory. Everyone who builds something.
 
-## Tech Stack 🛠️
+## What's Working
 
-- [TypeScript](https://www.typescriptlang.org/)
-- [React](https://react.dev/)
-- [Next.js](https://nextjs.org/)
-- [NextAuth.js](https://next-auth.js.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [React Query](https://tanstack.com/query/latest/docs/react/overview)
-- [React Aria](https://react-spectrum.adobe.com/react-aria/getting-started.html)
-- [React Hook Form](https://react-hook-form.com/)
-- [Zod](https://zod.dev/)
-- [Prisma](https://www.prisma.io/)
-- [AWS S3](https://aws.amazon.com/s3/)
-- [AWS SES](https://aws.amazon.com/ses/)
+| Feature | Status |
+|---------|--------|
+| Social feed (posts, likes, comments, hashtags, @mentions) | Live |
+| Direct messages (1-on-1 and group chat) | Live |
+| User profiles with skills and portfolio links | Live |
+| GitHub OAuth login | Live |
+| Quick Entry login (type a name, you're in) | Live |
+| Discover / search users | Live |
+| Notifications | Live |
+| Builder intake form (what do you build, why, skills, links) | Live |
+| Bug reporter with screenshot capture | Live |
+| Dark theme (green/purple) | Live |
+| Terms of Service | Live |
+| Public feed (browse without login) | Live |
 
-## About this project
+## What Needs Building
 
-This project is an open source portfolio project that explores how can a social media app be built with Next.js.
+This is where you come in. Fork it, build a feature, submit a PR.
 
-It utilizes the following Next.js features:
+| Feature | Difficulty | Impact |
+|---------|-----------|--------|
+| **Voice channels** (LiveKit — Xbox-style join/leave) | Medium | Huge |
+| **Video/screen share** (teaching mode) | Medium | Huge |
+| **Image uploads** (Supabase Storage) | Easy | High |
+| **Real-time chat** (WebSocket, replace polling) | Medium | High |
+| **Mobile optimization** | Easy | High |
+| **User search by skills** | Easy | Medium |
+| **Builder marketplace** (list services, find people) | Medium | Huge |
+| **ARAYA AI integration** (AI user that posts, moderates) | Medium | High |
+| **Email notifications** | Easy | Medium |
+| **Custom domains** | Easy | Medium |
 
-- routing
-- static and dynamic rendering
-- server and client components
-- nested layouts
-- route handlers
-- middleware
-- font optimizations
-- dynamic metadata
+## Tech Stack
 
-Due to the highly dynamic nature of social media apps, most data fetching and mutations are done on the client-side using React Query.
+- **Next.js 14** — React framework (App Router)
+- **TypeScript** — type safety
+- **Tailwind CSS** — styling
+- **Prisma** — database ORM
+- **PostgreSQL** (Supabase) — database
+- **NextAuth.js 5** — authentication (GitHub OAuth + Credentials)
+- **React Query** — client-side data fetching
+- **chatscope** — chat UI components
+- **Railway** — hosting
 
-React Query simplifies the implementation of features that would have been challenging and inefficient with Next.js's server components and server actions. These features include bidirectional infinite scrolling, optimistic updates, client-side data caching, client-side loading states, and more.
+## Get It Running Locally
 
-## Accessibility
+```bash
+# Clone it
+git clone https://github.com/overkillkulture/comms-unity.git
+cd comms-unity
 
-The UI components are built with React Aria's accessibility hooks, assuring accessibility across different platforms.
+# Install
+npm install
 
-## Deployment on EC2
+# Set up your database (SQLite for local dev)
+# Edit prisma/schema.prisma — change provider to "sqlite"
+# Create .env with: DATABASE_URL="file:./dev.db"
 
-Follow these steps to deploy Munia on an EC2 instance.
+# Push schema and generate client
+npx prisma db push
+npx prisma generate
 
-1. Set up a PostgreSQL database and copy its connection URL into `.env`.
-2. Set up a client application for each OAuth provider (Github, Google and Facebook) and copy the client id's and client secrets into `.env.local`.
-3. Run `npm install`
-4. Run `npm run prisma:deploy`
-5. Run `npm run prisma:seed`
-6. Run `npm run pm2` (or `npm run build` and then `npm run start` if you're not using PM2). You can modify the port specified in the `pm2` script depending on your server configuration.
+# Seed with starter content
+node scripts/seed-community.mjs
+node scripts/seed-messages.mjs
+
+# Run it
+npm run dev
+# Open http://localhost:3002
+```
+
+## How to Contribute
+
+1. **Fork this repo**
+2. **Build something** — pick from the list above or build whatever you think is missing
+3. **Submit a PR** — describe what you built and why
+4. **Join the community** — [comms-unity-production.up.railway.app](https://comms-unity-production.up.railway.app)
+
+No gatekeepers. No committees. If it makes the platform better, it gets merged.
+
+### The Five Questions
+
+When you join, we ask five questions. These aren't just profile fields — they're how we list you in the builder network:
+
+1. **What do you build?**
+2. **Why do you build it?**
+3. **How long have you been building?**
+4. **What do you know?** (skills — anything counts)
+5. **Link to what you're building**
+
+## The Vision
+
+Get builders into a video communications platform where we can talk, share screens, teach each other, and optimize the platform itself while we're using it. Build the ship while sailing it.
+
+Voice channels are next. LiveKit (open source WebRTC) is the play — Xbox-style voice rooms where you click in, talk, click out. Screen sharing for teaching. AI that listens and helps.
+
+## Architecture
+
+```
+Browser → Next.js (Railway) → Prisma → PostgreSQL (Supabase)
+                ↓
+        NextAuth (GitHub OAuth + Quick Entry)
+                ↓
+        React Query (client caching)
+                ↓
+        chatscope (DM UI)
+```
+
+## License
+
+MIT — do whatever you want with it.
+
+## Built By
+
+The Consciousness Revolution community. Started by [@overkillkulture](https://github.com/overkillkulture).
+
+**The revolution doesn't need followers. It needs builders.**
+
+3 → 7 → 13 → ∞
