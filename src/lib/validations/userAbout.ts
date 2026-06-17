@@ -9,16 +9,15 @@ export const userAboutSchema = z.object({
   }),
   // email: nonEmptyString.email(),
   name: nonEmptyString,
-  phoneNumber: nonEmptyString
-    .regex(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/, { message: 'Invalid phone number' })
-    .nullable(),
-  bio: nonEmptyString.nullable(),
+  phoneNumber: z.string().trim().nullable(), // repurposed: "How long have you been building?"
+  bio: nonEmptyString.nullable(), // repurposed: "What do you build?"
   website: nonEmptyString
     .regex(/^(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$/, {
       message: 'Invalid website',
     })
     .nullable(),
-  address: nonEmptyString.nullable(),
+  address: z.string().trim().nullable(), // repurposed: "Why do you build it?"
+  skills: z.string().nullable(), // comma-separated skills
   gender: z.union([z.literal('FEMALE'), z.literal('MALE'), z.literal('NONBINARY')]).nullable(),
   relationshipStatus: z
     .union([z.literal('SINGLE'), z.literal('IN_A_RELATIONSHIP'), z.literal('ENGAGED'), z.literal('MARRIED')])

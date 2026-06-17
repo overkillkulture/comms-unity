@@ -1,9 +1,8 @@
 import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
 import authConfig from '@/auth.config';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/lib/prisma/prisma';
-import { createSendEmailCommand } from '@/lib/ses/createSendEmailCommand';
-import { sesClient } from '@/lib/ses/sesClient';
 
 declare module 'next-auth' {
   interface Session {
@@ -11,9 +10,6 @@ declare module 'next-auth' {
   }
 }
 
-// We are splitting the auth configuration into multiple files (`auth.config.ts` and `auth.ts`),
-// as some adapters (Prisma) and Node APIs (`stream` module required for sending emails) are
-// not supported in the Edge runtime. More info here: https://authjs.dev/guides/upgrade-to-v5
 export const {
   auth,
   handlers: { GET, POST },
@@ -22,53 +18,37 @@ export const {
   ...authConfig,
   providers: [
     ...authConfig.providers,
-    {
-      // There's currently an issue with NextAuth that requires all these properties to be specified
-      // even if we really only need the `sendVerificationRequest`: https://github.com/nextauthjs/next-auth/issues/8125
-      id: 'email',
-      type: 'email',
-      name: 'Email',
-      from: 'noreply@norcio.dev',
-      server: {},
-      maxAge: 24 * 60 * 60,
-      options: {},
-      async sendVerificationRequest({ identifier: email, url }) {
-        const sendEmailCommand = createSendEmailCommand(
-          email,
-          'noreply@norcio.dev',
-          'Login To Munia',
-          `<body>
-  <table width="100%" border="0" cellspacing="20" cellpadding="0"
-    style=" max-width: 600px; margin: auto; border-radius: 10px;">
-    <tr>
-      <td align="center"
-        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif;">
-        Login to <strong>Munia</strong>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" style="padding: 20px 0;">
-        <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td align="center" style="border-radius: 5px;" bgcolor="purple"><a href="${url}"
-                target="_blank"
-                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: black; text-decoration: none; border-radius: 5px; padding: 10px 20px; display: inline-block; font-weight: bold;">Login</a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td align="center"
-        style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif;">
-        If you did not request this email you can safely ignore it.
-      </td>
-    </tr>
-  </table>
-</body>`,
-        );
-        await sesClient.send(sendEmailCommand);
+    // Quick-entry login: just type a name and you're in
+    Credentials({
+      id: 'quick-entry',
+      name: 'Quick Entry',
+      credentials: {
+        name: { label: 'Your Name', type: 'text', placeholder: 'Enter any name to join' },
       },
-    },
+      async authorize(credentials) {
+        const name = credentials?.name as string;
+        if (!name || name.trim().length < 1) return null;
+
+        const username = name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+        // Find or create user by username
+        let user = await prisma.user.findFirst({
+          where: { username },
+        });
+
+        if (!user) {
+          user = await prisma.user.create({
+            data: {
+              username,
+              name: name.trim(),
+              email: `${username}@community.local`,
+            },
+          });
+        }
+
+        return { id: user.id, name: user.name, email: user.email };
+      },
+    }),
   ],
   adapter: PrismaAdapter(prisma),
   session: {
@@ -78,14 +58,6 @@ export const {
     ...authConfig.callbacks,
     session({ token, user, ...rest }) {
       return {
-        /**
-         * We need to explicitly return the `id` here to make it available to the client
-         * when calling `useSession()` as NextAuth does not include the user's id.
-         *
-         * If you only need to get the `id` of the user in the client, use NextAuth's
-         * `useSession()`, but if you need more of user's data, use the `useSessionUserData()`
-         * custom hook instead.
-         */
         user: {
           id: token.sub!,
         },

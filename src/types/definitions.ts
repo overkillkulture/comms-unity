@@ -1,4 +1,10 @@
-import { VisualMediaType, User, Follow, ActivityType, Gender, VisualMedia, RelationshipStatus } from '@prisma/client';
+import { User, Follow, VisualMedia } from '@prisma/client';
+
+// Enum types replaced with strings for SQLite compatibility
+type VisualMediaType = string;
+type ActivityType = string;
+type Gender = string;
+type RelationshipStatus = string;
 
 type UserSummary = Pick<User, 'id' | 'username' | 'name' | 'profilePhoto'>;
 /**

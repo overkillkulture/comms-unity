@@ -15,11 +15,11 @@ export default {
       const isLoggedIn = !!auth?.user;
       const isOnAuthPage = pathname.startsWith('/login') || pathname.startsWith('/register');
 
-      const unProtectedPages = ['/terms', '/privacy-policy']; // Add more here if needed
-      const isOnUnprotectedPage =
-        pathname === '/' || // The root page '/' is also an unprotected page
-        unProtectedPages.some((page) => pathname.startsWith(page));
-      const isProtectedPage = !isOnUnprotectedPage;
+      // OPEN COMMUNITY — let people browse without logging in
+      // Only require auth for setup/edit-profile pages
+      const protectedPages = ['/setup', '/edit-profile'];
+      const isProtectedPage = protectedPages.some((page) => pathname.startsWith(page));
+      const isOnUnprotectedPage = !isProtectedPage;
 
       if (isOnAuthPage) {
         // Redirect to /feed, if logged in and is on an auth page

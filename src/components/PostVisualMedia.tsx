@@ -1,6 +1,5 @@
 import { cn } from '@/lib/cn';
 import { Play } from '@/svg_components';
-import { VisualMediaType } from '@prisma/client';
 import { useMemo } from 'react';
 import { mergeProps, useFocusRing, usePress } from 'react-aria';
 
@@ -11,7 +10,7 @@ export function PostVisualMedia({
   height,
   colSpan,
 }: {
-  type: VisualMediaType;
+  type: string;
   url: string;
   onClick: () => void;
   height: string;

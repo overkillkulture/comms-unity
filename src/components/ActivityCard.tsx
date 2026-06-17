@@ -1,5 +1,4 @@
 import { ProfilePhoto } from '@/components/ui/ProfilePhoto';
-import { ActivityType } from '@prisma/client';
 import { formatDistanceToNowStrict } from 'date-fns';
 import React, { ComponentProps, useRef } from 'react';
 import { UserSummaryAfterSetUp } from '@/types/definitions';
@@ -11,7 +10,7 @@ interface ActivityCardProps extends ComponentProps<'div'> {
   children: React.ReactNode;
   user: UserSummaryAfterSetUp;
   date: Date;
-  type: ActivityType;
+  type: string;
   isRead: boolean;
 }
 

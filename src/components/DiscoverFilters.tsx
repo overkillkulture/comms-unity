@@ -1,7 +1,6 @@
 'use client';
 
 import { Select } from '@/components/ui/Select';
-import { Gender, RelationshipStatus } from '@prisma/client';
 import { kebabCase, lowerCase, snakeCase, startCase, toUpper } from 'lodash';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { Item } from 'react-stately';
@@ -17,8 +16,8 @@ export function DiscoverFilters() {
     gender: searchParams.get('gender') || undefined,
     relationshipStatus: searchParams.get('relationship-status') || undefined,
   };
-  const genderFilters: Gender[] = ['MALE', 'FEMALE', 'NONBINARY'];
-  const relationshipStatusFilters: RelationshipStatus[] = ['SINGLE', 'IN_A_RELATIONSHIP', 'ENGAGED', 'MARRIED'];
+  const genderFilters: string[] = ['MALE', 'FEMALE', 'NONBINARY'];
+  const relationshipStatusFilters: string[] = ['SINGLE', 'IN_A_RELATIONSHIP', 'ENGAGED', 'MARRIED'];
 
   const updateParams = useCallback(
     <T extends DiscoverFilterKeys>({ key, value }: { key: T; value: TDiscoverFilters[T] }) => {

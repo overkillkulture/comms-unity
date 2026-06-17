@@ -21,7 +21,7 @@ export async function GET(request: Request, { params }: { params: { hashtag: str
   const res = await prisma.post.findMany({
     where: {
       content: {
-        search: params.hashtag,
+        contains: `#${params.hashtag}`,
       },
       ...filters,
     },

@@ -1,12 +1,13 @@
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["commsunity"]
 }
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["multiSchema"]
 }
 
 model Account {
@@ -15,17 +16,18 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@schema("commsunity")
 }
 
 model Session {
@@ -34,23 +36,22 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("commsunity")
 }
 
 model User {
-  // Do not change the `id` field, it must be permanent and immutable.
-  id                 String              @id @default(cuid())
-  // The `username` can be updated anytime by the user.
-  // It will acquire the `id` as its default value.
-  username           String?             @unique
-  email              String?             @unique
+  id                 String     @id @default(cuid())
+  username           String?    @unique
+  email              String?    @unique
   name               String?
-  gender             Gender?
+  gender             String?
   birthDate          DateTime?
   phoneNumber        String?
   address            String?
   bio                String?
   website            String?
-  relationshipStatus RelationshipStatus?
+  relationshipStatus String?
   emailVerified      DateTime?
   image              String?
   accounts           Account[]
@@ -62,10 +63,17 @@ model User {
   postLikes          PostLike[]
   comments           Comment[]
   commentLikes       CommentLike[]
-  followers          Follow[]            @relation("following")
-  following          Follow[]            @relation("follower")
-  activities         Activity[]          @relation("activity")
-  notifications      Activity[]          @relation("notification")
+  followers          Follow[]     @relation("following")
+  following          Follow[]     @relation("follower")
+  activities         Activity[]   @relation("activity")
+  notifications      Activity[]   @relation("notification")
+  skills             String?
+  portfolioLinks     PortfolioLink[]
+  conversationMembers ConversationMember[]
+  messages           Message[]
+  bugReports         BugReport[]
+
+  @@schema("commsunity")
 }
 
 model VerificationToken {
@@ -74,6 +82,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@schema("commsunity")
 }
 
 model Follow {
@@ -84,6 +93,7 @@ model Follow {
   followingId String
 
   @@unique([followerId, followingId])
+  @@schema("commsunity")
 }
 
 model Post {
@@ -95,6 +105,8 @@ model Post {
   userId      String
   postLikes   PostLike[]
   comments    Comment[]
+
+  @@schema("commsunity")
 }
 
 model PostLike {
@@ -106,6 +118,7 @@ model PostLike {
   postId    Int
 
   @@unique([userId, postId])
+  @@schema("commsunity")
 }
 
 model Comment {
@@ -116,16 +129,15 @@ model Comment {
   userId       String
   commentLikes CommentLike[]
 
-  // If there is a `postId`, it is a comment
   post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
 
-  // If there is a `parentId`, it is a reply
   parent   Comment? @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
   parentId Int?
 
-  // Self-referential relation
   replies Comment[] @relation("Replies")
+
+  @@schema("commsunity")
 }
 
 model CommentLike {
@@ -137,72 +149,96 @@ model CommentLike {
   commentId Int
 
   @@unique([userId, commentId])
+  @@schema("commsunity")
 }
 
 model VisualMedia {
-  id         Int             @id @default(autoincrement())
-  type       VisualMediaType @default(PHOTO)
+  id         Int      @id @default(autoincrement())
+  type       String   @default("PHOTO")
   fileName   String
-  uploadedAt DateTime        @default(now())
-  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  uploadedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  post       Post            @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId     Int
+
+  @@schema("commsunity")
 }
 
-// This Activity model is similar to this approach: https://stackoverflow.com/a/1766371/8434369
-// Example:
-// * If the activity type is 'CREATE_COMMENT', the `sourceId` must be the `id` of the Comment and
-// its `targetId` must be the `id` of the Post that was commented on.
-//
-// * If the activity type is 'POST_LIKE', the `sourceId` must be the `id` of the PostLike and
-// its `targetId` must be the `id` of the liked Post.
-//
-// * If the activity type is 'COMMENT_MENTION', the `sourceId` must be the `id` of the Comment and
-// its `targetId` must be the `id` of the Post that was commented on.
 model Activity {
-  id                   Int          @id @default(autoincrement())
-  createdAt            DateTime     @default(now())
-  type                 ActivityType
+  id                   Int      @id @default(autoincrement())
+  createdAt            DateTime @default(now())
+  type                 String
   sourceId             Int
   targetId             Int?
-  sourceUser           User         @relation("activity", fields: [sourceUserId], references: [id], onDelete: Cascade)
+  sourceUser           User     @relation("activity", fields: [sourceUserId], references: [id], onDelete: Cascade)
   sourceUserId         String
-  targetUser           User         @relation("notification", fields: [targetUserId], references: [id], onDelete: Cascade)
+  targetUser           User     @relation("notification", fields: [targetUserId], references: [id], onDelete: Cascade)
   targetUserId         String
-  isNotificationActive Boolean      @default(true)
-  isNotificationRead   Boolean      @default(false)
+  isNotificationActive Boolean  @default(true)
+  isNotificationRead   Boolean  @default(false)
+
+  @@schema("commsunity")
 }
 
-enum ActivityType {
-  CREATE_FOLLOW // CREATE_FOLLOW does not use a `targetId`, only `targetUserId`
+model Conversation {
+  id        Int                  @id @default(autoincrement())
+  name      String?
+  type      String  @default("DM")
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  members   ConversationMember[]
+  messages  Message[]
 
-  POST_LIKE
-  POST_MENTION // POST_MENTION does not use a `targetId`, only `targetUserId`
-
-  CREATE_COMMENT
-  COMMENT_MENTION
-  COMMENT_LIKE
-
-  CREATE_REPLY
-  REPLY_MENTION
-  REPLY_LIKE
+  @@schema("commsunity")
 }
 
-enum VisualMediaType {
-  PHOTO
-  VIDEO
+model ConversationMember {
+  id             Int          @id @default(autoincrement())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId Int
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  joinedAt       DateTime     @default(now())
+  lastReadAt     DateTime     @default(now())
+
+  @@unique([conversationId, userId])
+  @@schema("commsunity")
 }
 
-enum Gender {
-  FEMALE
-  MALE
-  NONBINARY
+model Message {
+  id             Int          @id @default(autoincrement())
+  content        String
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId Int
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId       String
+
+  @@schema("commsunity")
 }
 
-enum RelationshipStatus {
-  SINGLE
-  IN_A_RELATIONSHIP
-  ENGAGED
-  MARRIED
+model PortfolioLink {
+  id          Int    @id @default(autoincrement())
+  title       String
+  url         String
+  description String?
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  @@schema("commsunity")
+}
+
+model BugReport {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  page        String
+  status      String   @default("OPEN")
+  priority    String   @default("MEDIUM")
+  createdAt   DateTime @default(now())
+  reporterId  String?
+  reporter    User?    @relation(fields: [reporterId], references: [id], onDelete: SetNull)
+
+  @@schema("commsunity")
 }

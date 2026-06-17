@@ -3,83 +3,115 @@
 @tailwind utilities;
 
 @layer base {
+  /* Consciousness Revolution Theme — Dark by default */
   :root {
-    --background: 254 253 255;
-    --foreground: 16 0 35;
-    --card: 253 250 255;
-    --card-foreground: 60 0 119;
-    --popover: 251 251 254;
-    --popover-foreground: 34 0 74;
-    --primary: 136 0 202;
-    --primary-foreground: 250 240 255;
-    --primary-accent: 163 0 241;
-    --secondary: 237 238 243;
-    --secondary-foreground: 77 81 104;
-    --secondary-accent: 225 227 238;
-    --muted: 204 208 222;
-    --muted-foreground: 77 81 104;
-    --accent: 125 11 239;
-    --accent-foreground: 249 242 255;
-    --success: 244 252 246;
-    --success-foreground: 65 176 87;
-    --warning: 255 253 238;
-    --warning-foreground: 244 197 25;
-    --destructive: 255 246 250;
-    --destructive-foreground: 246 100 157;
-    --border: 241 224 253;
-    --input: 238 239 249;
+    --background: 8 12 16;
+    --foreground: 220 235 230;
+    --card: 14 22 28;
+    --card-foreground: 200 225 215;
+    --popover: 12 18 24;
+    --popover-foreground: 220 235 230;
+    --primary: 0 230 150;
+    --primary-foreground: 8 12 16;
+    --primary-accent: 0 255 170;
+    --secondary: 22 32 38;
+    --secondary-foreground: 160 185 175;
+    --secondary-accent: 30 42 50;
+    --muted: 45 60 70;
+    --muted-foreground: 140 165 155;
+    --accent: 156 39 176;
+    --accent-foreground: 240 220 255;
+    --success: 0 200 100;
+    --success-foreground: 200 255 220;
+    --warning: 241 196 15;
+    --warning-foreground: 255 250 220;
+    --destructive: 231 76 60;
+    --destructive-foreground: 255 235 235;
+    --border: 30 50 45;
+    --input: 20 35 32;
     --ring: 1rem;
   }
+
+  /* Light mode override (if someone toggles it) */
+  .light {
+    --background: 240 245 242;
+    --foreground: 12 20 16;
+    --card: 250 255 252;
+    --card-foreground: 20 40 30;
+    --popover: 248 252 250;
+    --popover-foreground: 12 20 16;
+    --primary: 0 180 120;
+    --primary-foreground: 255 255 255;
+    --primary-accent: 0 200 140;
+    --secondary: 230 238 234;
+    --secondary-foreground: 60 80 70;
+    --secondary-accent: 218 228 222;
+    --muted: 190 205 198;
+    --muted-foreground: 80 100 90;
+    --accent: 0 160 110;
+    --accent-foreground: 255 255 255;
+    --success: 0 180 90;
+    --success-foreground: 20 60 35;
+    --warning: 241 196 15;
+    --warning-foreground: 60 50 0;
+    --destructive: 220 60 50;
+    --destructive-foreground: 255 240 240;
+    --border: 200 215 208;
+    --input: 230 240 236;
+  }
+
+  /* Dark mode — same as root (dark-first design) */
   .dark {
-    --background: 16 0 35;
-    --foreground: 251 243 255;
-    --card: 35 27 56;
-    --card-foreground: 231 206 255;
-    --popover: 24 31 41;
-    --popover-foreground: 251 251 254;
-    --primary: 177 58 255;
-    --primary-foreground: 250 240 255;
-    --primary-accent: 169 38 255;
-    --secondary: 40 42 54;
-    --secondary-foreground: 204 208 222;
-    --secondary-accent: 50 52 66;
-    --muted: 77 81 104;
-    --muted-foreground: 204 208 222;
-    --accent: 94 0 156;
-    --accent-foreground: 249 242 255;
-    --success: 8 113 29;
-    --success-foreground: 221 242 225;
-    --warning: 244 197 25;
-    --warning-foreground: 255 253 238;
-    --destructive: 246 100 157;
-    --destructive-foreground: 255 246 250;
-    --border: 57 49 75;
-    --input: 57 49 75;
+    --background: 8 12 16;
+    --foreground: 220 235 230;
+    --card: 14 22 28;
+    --card-foreground: 200 225 215;
+    --popover: 12 18 24;
+    --popover-foreground: 220 235 230;
+    --primary: 0 230 150;
+    --primary-foreground: 8 12 16;
+    --primary-accent: 0 255 170;
+    --secondary: 22 32 38;
+    --secondary-foreground: 160 185 175;
+    --secondary-accent: 30 42 50;
+    --muted: 45 60 70;
+    --muted-foreground: 140 165 155;
+    --accent: 156 39 176;
+    --accent-foreground: 240 220 255;
+    --success: 0 200 100;
+    --success-foreground: 200 255 220;
+    --warning: 241 196 15;
+    --warning-foreground: 255 250 220;
+    --destructive: 231 76 60;
+    --destructive-foreground: 255 235 235;
+    --border: 30 50 45;
+    --input: 20 35 32;
   }
 
-  /* width */
+  /* Scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
-
-  /* Track */
   ::-webkit-scrollbar-track {
     background: rgb(var(--background));
   }
-
-  /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--muted));
+    background: rgb(var(--primary) / 0.3);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--primary) / 0.6);
   }
 
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--muted-foreground));
+  /* Selection color */
+  ::selection {
+    background: rgb(var(--primary) / 0.25);
+    color: rgb(var(--foreground));
   }
 }
 
 @layer components {
   .link {
-    @apply rounded-sm decoration-blue-500 decoration-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500;
+    @apply rounded-sm decoration-emerald-400 decoration-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500;
   }
 }

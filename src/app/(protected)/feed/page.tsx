@@ -1,10 +1,11 @@
 import { CreatePostModalLauncher } from '@/components/CreatePostModalLauncher';
 import { Posts } from '@/components/Posts';
+import { PublicPosts } from '@/components/PublicPosts';
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
 import { getServerUser } from '@/lib/getServerUser';
 
 export const metadata = {
-  title: 'Munia | Feed',
+  title: 'Community | Feed',
 };
 
 export default async function Page() {
@@ -17,8 +18,12 @@ export default async function Page() {
           <ThemeSwitch />
         </div>
       </div>
-      <CreatePostModalLauncher />
-      {user && <Posts type="feed" userId={user.id} />}
+      {user && <CreatePostModalLauncher />}
+      {user ? (
+        <Posts type="feed" userId={user.id} />
+      ) : (
+        <PublicPosts />
+      )}
     </div>
   );
 }

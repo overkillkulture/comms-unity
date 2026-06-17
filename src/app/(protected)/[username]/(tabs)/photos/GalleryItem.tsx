@@ -1,9 +1,8 @@
 import { cn } from '@/lib/cn';
 import { Play } from '@/svg_components';
-import { VisualMediaType } from '@prisma/client';
 import { mergeProps, useFocusRing, usePress } from 'react-aria';
 
-export function GalleryItem({ type, url, onClick }: { type: VisualMediaType; url: string; onClick: () => void }) {
+export function GalleryItem({ type, url, onClick }: { type: string; url: string; onClick: () => void }) {
   const { pressProps, isPressed } = usePress({
     onPress: onClick,
   });

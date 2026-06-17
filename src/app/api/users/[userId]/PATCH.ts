@@ -26,6 +26,7 @@ export async function PATCH(request: Request, { params }: { params: { userId: st
         data: {
           ...validate.data,
           birthDate: validate.data.birthDate && new Date(validate.data.birthDate),
+          skills: validate.data.skills || null,
         },
         include: includeToUser(user.id),
       });

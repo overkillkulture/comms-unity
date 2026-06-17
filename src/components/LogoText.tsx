@@ -5,7 +5,7 @@ interface LogoTextProps extends React.HTMLAttributes<HTMLHeadElement> {}
 export function LogoText({ ...rest }: LogoTextProps) {
   return (
     <h1 {...rest} className={cn('font-bold text-primary', rest.className)}>
-      Munia
+      COMMS<span className="text-purple-400">-</span><span className="text-foreground/60">UNITY</span>
     </h1>
   );
 }
