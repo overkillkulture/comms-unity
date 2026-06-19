@@ -4,7 +4,7 @@ import { VariantProps, cva } from 'class-variance-authority';
 import { AriaToggleButtonProps, mergeProps, useFocusRing, useToggleButton } from 'react-aria';
 import { useToggleState } from 'react-stately';
 
-const toggle = cva('flex cursor-pointer select-none items-center gap-3 rounded-full px-4 py-2 active:ring-4', {
+const toggle = cva('flex cursor-pointer select-none items-center gap-3 rounded-full px-4 py-3 active:ring-4 min-h-[44px] touch-manipulation', {
   variants: {
     color: {
       red: 'hover:bg-destructive-foreground/30 focus:outline-none',
