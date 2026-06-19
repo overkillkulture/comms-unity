@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { cn } from '@/lib/cn';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
@@ -29,6 +29,7 @@ export const Post = memo(
     const { data: session } = useSession();
     const userId = session?.user?.id;
     const { likeMutation, unLikeMutation } = usePostLikesMutations({ postId });
+    const [expanded, setExpanded] = useState(false);
 
     const { data, isPending, isError } = useQuery<GetPost>({
       queryKey: ['posts', postId],
@@ -46,17 +47,25 @@ export const Post = memo(
     const unLikePost = useCallback(() => unLikeMutation.mutate(), [unLikeMutation]);
     const handleLikeToggle = useCallback(
       (isSelected: boolean) => {
+        if (!userId) {
+          window.location.href = '/login';
+          return;
+        }
         if (isSelected) {
           likePost();
         } else {
           unLikePost();
         }
       },
-      [likePost, unLikePost],
+      [userId, likePost, unLikePost],
     );
     const handleCommentsToggle = useCallback(() => {
+      if (!userId) {
+        window.location.href = '/login';
+        return;
+      }
       toggleComments(postId);
-    }, [postId, toggleComments]);
+    }, [userId, postId, toggleComments]);
     const variants = useMemo(
       () => ({
         animate: {
@@ -81,8 +90,8 @@ export const Post = memo(
     const numberOfLikes = _count.postLikes;
 
     return (
-      <div className="rounded-2xl bg-card px-4 shadow sm:px-8">
-        <div className="flex items-center justify-between pt-4 sm:pt-5">
+      <div className="rounded-xl bg-card px-3 shadow sm:rounded-2xl sm:px-8">
+        <div className="flex items-center justify-between pt-3 sm:pt-5">
           <ProfileBlock
             name={author.name!}
             username={author.username!}
@@ -92,9 +101,25 @@ export const Post = memo(
           {isOwnPost && <PostOptions postId={postId} content={content} visualMedia={visualMedia} />}
         </div>
         {content && (
-          <p className="mb-4 mt-5 text-lg text-muted-foreground">
-            <HighlightedMentionsAndHashTags text={content} shouldAddLinks />
-          </p>
+          <div className="mb-4 mt-3">
+            <p
+              className={cn(
+                'text-base text-muted-foreground sm:text-lg',
+                !expanded && content.length > 280 && 'line-clamp-4',
+              )}
+            >
+              <HighlightedMentionsAndHashTags text={content} shouldAddLinks />
+            </p>
+            {content.length > 280 && !expanded && (
+              <button
+                type="button"
+                onClick={() => setExpanded(true)}
+                className="mt-1 text-sm font-medium text-primary hover:text-primary-accent"
+              >
+                Read more
+              </button>
+            )}
+          </div>
         )}
         {visualMedia.length > 0 && (
           <div className="mb-4 mt-5 overflow-hidden rounded-2xl">

@@ -11,9 +11,9 @@ export const metadata = {
 export default async function Page() {
   const [user] = await getServerUser();
   return (
-    <div className="px-4 pt-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-4xl font-bold">Feed</h1>
+    <div className="px-2 pt-3 sm:px-4 sm:pt-4">
+      <div className="mb-3 flex items-center justify-between">
+        <h1 className="text-2xl font-bold sm:text-4xl">Feed</h1>
         <div>
           <ThemeSwitch />
         </div>
