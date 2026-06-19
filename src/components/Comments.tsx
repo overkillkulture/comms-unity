@@ -10,6 +10,7 @@ import { useShouldAnimate } from '@/hooks/useShouldAnimate';
 import { commentFramerVariants } from '@/lib/framerVariants';
 import { CommentCreate } from './CommentCreate';
 import { Comment } from './Comment';
+import { usePostRealtime } from '@/hooks/usePusherSubscription';
 
 export function Comments({ postId }: { postId: number }) {
   const qc = useQueryClient();
@@ -17,6 +18,9 @@ export function Comments({ postId }: { postId: number }) {
 
   const { data: session } = useSession();
   const { shouldAnimate } = useShouldAnimate();
+
+  // Subscribe to real-time updates for this post
+  usePostRealtime(postId);
 
   const {
     data: comments,

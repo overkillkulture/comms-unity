@@ -14,6 +14,8 @@ import { commentWriteSchema } from '@/lib/validations/comment';
 import { NextResponse } from 'next/server';
 import { GetComment } from '@/types/definitions';
 import { z } from 'zod';
+import { getPusher, CHANNELS, EVENTS } from '@/lib/pusher/server';
+import { maybeRespondAsAraya } from '@/lib/araya/responder';
 
 export async function POST(request: Request, { params }: { params: { commentId: string } }) {
   const [user] = await getServerUser();
@@ -77,7 +79,21 @@ export async function POST(request: Request, { params }: { params: { commentId: 
       isUpdate: false,
     });
 
-    return NextResponse.json((await toGetComment(res)) as GetComment);
+    const replyData = (await toGetComment(res)) as GetComment;
+
+    // Broadcast new reply via Pusher (real-time)
+    const pusher = getPusher();
+    if (pusher) {
+      pusher.trigger(CHANNELS.post(comment.postId), EVENTS.NEW_REPLY, {
+        parentId: commentId,
+        reply: replyData,
+      }).catch(() => {});
+    }
+
+    // Trigger ARAYA inline response if mentioned (async, non-blocking)
+    maybeRespondAsAraya({ content, postId: comment.postId, commentId: res.id }).catch(() => {});
+
+    return NextResponse.json(replyData);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(null, {

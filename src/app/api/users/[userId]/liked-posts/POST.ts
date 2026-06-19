@@ -11,6 +11,7 @@
 import { getServerUser } from '@/lib/getServerUser';
 import prisma from '@/lib/prisma/prisma';
 import { NextResponse } from 'next/server';
+import { getPusher, CHANNELS, EVENTS } from '@/lib/pusher/server';
 
 export async function POST(request: Request, { params }: { params: { userId: string } }) {
   const [user] = await getServerUser();
@@ -59,6 +60,13 @@ export async function POST(request: Request, { params }: { params: { userId: str
         targetUserId: postOwner?.userId,
       },
     });
+  }
+
+  // Broadcast like count update via Pusher
+  const pusher = getPusher();
+  if (pusher) {
+    const likeCount = await prisma.postLike.count({ where: { postId } });
+    pusher.trigger(CHANNELS.post(postId), EVENTS.POST_LIKED, { postId, count: likeCount }).catch(() => {});
   }
 
   return NextResponse.json({});

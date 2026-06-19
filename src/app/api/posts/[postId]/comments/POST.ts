@@ -14,6 +14,8 @@ import { includeToComment } from '@/lib/prisma/includeToComment';
 import { toGetComment } from '@/lib/prisma/toGetComment';
 import { convertMentionUsernamesToIds } from '@/lib/convertMentionUsernamesToIds';
 import { mentionsActivityLogger } from '@/lib/mentionsActivityLogger';
+import { getPusher, CHANNELS, EVENTS } from '@/lib/pusher/server';
+import { maybeRespondAsAraya } from '@/lib/araya/responder';
 
 export async function POST(request: Request, { params }: { params: { postId: string } }) {
   const [user] = await getServerUser();
@@ -72,7 +74,18 @@ export async function POST(request: Request, { params }: { params: { postId: str
       isUpdate: false,
     });
 
-    return NextResponse.json(await toGetComment(res));
+    const commentData = await toGetComment(res);
+
+    // Broadcast new comment via Pusher (real-time)
+    const pusher = getPusher();
+    if (pusher) {
+      pusher.trigger(CHANNELS.post(postId), EVENTS.NEW_COMMENT, commentData).catch(() => {});
+    }
+
+    // Trigger ARAYA inline response if mentioned (async, non-blocking)
+    maybeRespondAsAraya({ content, postId, commentId: res.id }).catch(() => {});
+
+    return NextResponse.json(commentData);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(null, {
