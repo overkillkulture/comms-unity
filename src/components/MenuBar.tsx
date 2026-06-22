@@ -85,20 +85,19 @@ export function MenuBar() {
         )}
 
         {/* HQ TOOLS — Case Builder Toolkit */}
-        <div className="mt-4 w-full border-t border-border/20 pt-3">
+        <div className="mt-4 w-full overflow-y-auto border-t border-border/20 pt-3" style={{ maxHeight: 'calc(100vh - 420px)' }}>
           <div className="mb-2 px-4 text-[0.6rem] font-bold uppercase tracking-[0.15em] text-emerald-500/60">
             HQ Tools
           </div>
           {[
-            { emoji: '⚡', label: 'ARAYA', href: 'https://conciousnessrevolution.io/araya-chat.html' },
-            { emoji: '📁', label: 'Filing Cabinet', href: 'https://conciousnessrevolution.io/doc-vault.html' },
-            { emoji: '🎵', label: 'Music', href: 'https://conciousnessrevolution.io/music-store.html' },
-            { emoji: '🧠', label: 'Case Crunch', href: 'https://conciousnessrevolution.io/guardian/case-crunch.html' },
-            { emoji: '📸', label: 'Evidence Snap', href: 'https://conciousnessrevolution.io/guardian/evidence-snap.html' },
-            { emoji: '🔍', label: 'Pattern Library', href: 'https://conciousnessrevolution.io/guardian/patterns-library.html' },
-            { emoji: '📊', label: 'Actor Network', href: 'https://conciousnessrevolution.io/guardian/pattern-analysis.html' },
-            { emoji: '⚖️', label: 'Court Library', href: 'https://conciousnessrevolution.io/guardian/family-court-library.html' },
-            { emoji: '📋', label: 'Case Dashboard', href: 'https://conciousnessrevolution.io/guardian/case-dashboard.html' },
+            { emoji: '⚡', label: 'ARAYA', href: 'https://conciousnessrevolution.io/araya-chat.html', live: true },
+            { emoji: '🧠', label: 'Case Crunch', href: 'https://conciousnessrevolution.io/guardian/case-crunch.html', live: true },
+            { emoji: '📸', label: 'Evidence Snap', href: 'https://conciousnessrevolution.io/guardian/evidence-snap.html', live: true },
+            { emoji: '📋', label: 'Case Dashboard', href: 'https://conciousnessrevolution.io/guardian/case-dashboard.html', live: true },
+            { emoji: '🔍', label: 'Pattern Library', href: 'https://conciousnessrevolution.io/guardian/patterns-library.html', live: true },
+            { emoji: '⚖️', label: 'Court Library', href: 'https://conciousnessrevolution.io/guardian/family-court-library.html', live: true },
+            { emoji: '📁', label: 'Filing Cabinet', href: 'https://conciousnessrevolution.io/doc-vault.html', live: true },
+            { emoji: '🎵', label: 'Music', href: 'https://conciousnessrevolution.io/music-store.html', live: true },
           ].map((tool) => (
             <a
               key={tool.label}
@@ -112,18 +111,28 @@ export function MenuBar() {
             </a>
           ))}
 
-          {/* Empty dev slots */}
+          {/* COMING SOON — outlined spots */}
           <div className="mt-2 border-t border-border/10 pt-2">
             <div className="mb-1 px-4 text-[0.55rem] font-bold uppercase tracking-[0.15em] text-muted-foreground/40">
-              Dev Slots
+              Coming Soon
             </div>
-            {[1, 2, 3].map((n) => (
+            {[
+              { emoji: '🗂️', label: 'Room Files', desc: 'Drop files per room' },
+              { emoji: '🎥', label: 'Video Rooms', desc: 'LiveKit voice + video' },
+              { emoji: '🌐', label: 'Actor Network', desc: 'Cross-case connections' },
+              { emoji: '📖', label: 'Case Playbook', desc: 'Win/loss database' },
+              { emoji: '🤖', label: 'AI Slot (BYOK)', desc: 'Bring your own AI key' },
+            ].map((item) => (
               <div
-                key={n}
-                className="flex items-center gap-2.5 rounded-lg px-4 py-1.5 text-sm text-muted-foreground/30 transition-all hover:bg-primary-accent/10 hover:text-muted-foreground/60"
+                key={item.label}
+                className="group flex items-center gap-2.5 rounded-lg px-4 py-1.5 text-sm text-muted-foreground/30 transition-all hover:bg-primary-accent/10"
+                title={item.desc}
               >
-                <span className="w-5 text-center text-base">🔧</span>
-                <span className="italic">Empty slot #{n}</span>
+                <span className="w-5 text-center text-base opacity-40">{item.emoji}</span>
+                <span className="flex flex-col">
+                  <span className="text-muted-foreground/40 group-hover:text-muted-foreground/60">{item.label}</span>
+                  <span className="text-[0.55rem] text-muted-foreground/20">{item.desc}</span>
+                </span>
               </div>
             ))}
           </div>
