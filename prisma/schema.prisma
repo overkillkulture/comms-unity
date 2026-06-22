@@ -182,13 +182,15 @@ model Activity {
 }
 
 model Conversation {
-  id        Int                  @id @default(autoincrement())
-  name      String?
-  type      String  @default("DM")
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
-  members   ConversationMember[]
-  messages  Message[]
+  id          Int                  @id @default(autoincrement())
+  name        String?
+  type        String  @default("DM")
+  description String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  createdById String?
+  members     ConversationMember[]
+  messages    Message[]
 
   @@schema("commsunity")
 }
@@ -199,6 +201,7 @@ model ConversationMember {
   conversationId Int
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
+  role           String       @default("member")
   joinedAt       DateTime     @default(now())
   lastReadAt     DateTime     @default(now())
 

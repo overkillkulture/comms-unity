@@ -44,20 +44,48 @@ interface MessageData {
   sender: UserSummary;
 }
 
+interface RoomData {
+  id: number;
+  name: string;
+  description: string | null;
+  type: string;
+  members: (UserSummary & { role: string })[];
+  memberCount: number;
+  myRole: string;
+  lastMessage: {
+    content: string;
+    senderName: string;
+    createdAt: string;
+  } | null;
+  hasUnread: boolean;
+}
+
 export function MessagesClient({ userId }: { userId: string }) {
   const [conversations, setConversations] = useState<ConversationData[]>([]);
+  const [rooms, setRooms] = useState<RoomData[]>([]);
   const [activeConv, setActiveConv] = useState<number | null>(null);
+  const [activeType, setActiveType] = useState<'dm' | 'room'>('dm');
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showCreateRoom, setShowCreateRoom] = useState(false);
+  const [newRoomName, setNewRoomName] = useState('');
+  const [newRoomDesc, setNewRoomDesc] = useState('');
   const pollRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load conversations
   const loadConversations = useCallback(async () => {
     try {
-      const res = await fetch('/api/conversations');
-      if (res.ok) {
-        const data = await res.json();
+      const [convRes, roomRes] = await Promise.all([
+        fetch('/api/conversations'),
+        fetch('/api/rooms'),
+      ]);
+      if (convRes.ok) {
+        const data = await convRes.json();
         setConversations(data);
+      }
+      if (roomRes.ok) {
+        const data = await roomRes.json();
+        setRooms(data);
       }
     } catch (e) {
       console.error('Failed to load conversations', e);
@@ -65,6 +93,28 @@ export function MessagesClient({ userId }: { userId: string }) {
       setLoading(false);
     }
   }, []);
+
+  const createRoom = useCallback(async () => {
+    if (!newRoomName.trim()) return;
+    try {
+      const res = await fetch('/api/rooms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newRoomName, description: newRoomDesc }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setNewRoomName('');
+        setNewRoomDesc('');
+        setShowCreateRoom(false);
+        await loadConversations();
+        setActiveConv(data.id);
+        setActiveType('room');
+      }
+    } catch (e) {
+      console.error('Failed to create room', e);
+    }
+  }, [newRoomName, newRoomDesc, loadConversations]);
 
   // Load messages for active conversation
   const loadMessages = useCallback(async (convId: number) => {
@@ -127,7 +177,9 @@ export function MessagesClient({ userId }: { userId: string }) {
     [activeConv, userId, loadMessages],
   );
 
-  const activeConvData = conversations.find((c) => c.id === activeConv);
+  const activeConvData = activeType === 'room'
+    ? rooms.find((r) => r.id === activeConv)
+    : conversations.find((c) => c.id === activeConv);
 
   const timeAgo = (dateStr: string) => {
     const diff = Date.now() - new Date(dateStr).getTime();
@@ -153,6 +205,92 @@ export function MessagesClient({ userId }: { userId: string }) {
         <MainContainer>
           <Sidebar position="left" style={{ background: '#0e161c', borderRight: '1px solid rgba(0,230,150,0.1)' }}>
             <ConversationList style={{ background: '#0e161c' }}>
+              {/* ROOMS SECTION */}
+              {rooms.length > 0 && (
+                <>
+                  <div style={{ padding: '10px 16px 4px', fontSize: '0.65rem', color: '#2ecc71', letterSpacing: '1.5px', fontWeight: 700, textTransform: 'uppercase' as const }}>
+                    Private Rooms
+                  </div>
+                  {rooms.map((room) => (
+                    <Conversation
+                      key={`room-${room.id}`}
+                      name={`# ${room.name}`}
+                      info={room.lastMessage?.content || `${room.memberCount} members`}
+                      lastActivityTime={
+                        room.lastMessage ? timeAgo(room.lastMessage.createdAt) : undefined
+                      }
+                      unreadCnt={room.hasUnread ? 1 : 0}
+                      active={room.id === activeConv && activeType === 'room'}
+                      onClick={() => { setActiveConv(room.id); setActiveType('room'); }}
+                      style={{
+                        background: room.id === activeConv && activeType === 'room' ? 'rgba(46,204,113,0.12)' : 'transparent',
+                        borderBottom: '1px solid rgba(255,255,255,0.05)',
+                        borderLeft: '3px solid rgba(46,204,113,0.3)',
+                      }}
+                    >
+                      <Avatar
+                        name={room.name}
+                        style={{
+                          background: 'rgba(46, 204, 113, 0.2)',
+                          color: '#2ecc71',
+                        }}
+                      />
+                    </Conversation>
+                  ))}
+                </>
+              )}
+
+              {/* CREATE ROOM BUTTON */}
+              <div
+                onClick={() => setShowCreateRoom(!showCreateRoom)}
+                style={{
+                  padding: '8px 16px', fontSize: '0.78rem', color: '#2ecc71',
+                  cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.05)',
+                  opacity: 0.7,
+                }}
+              >
+                + Create Private Room
+              </div>
+
+              {showCreateRoom && (
+                <div style={{ padding: '8px 12px', background: 'rgba(46,204,113,0.04)' }}>
+                  <input
+                    value={newRoomName}
+                    onChange={(e) => setNewRoomName(e.target.value)}
+                    placeholder="Room name"
+                    style={{
+                      width: '100%', padding: '6px 10px', background: '#080c10',
+                      border: '1px solid rgba(46,204,113,0.2)', borderRadius: '6px',
+                      color: '#e0e0e0', fontSize: '0.82rem', marginBottom: '4px',
+                    }}
+                  />
+                  <input
+                    value={newRoomDesc}
+                    onChange={(e) => setNewRoomDesc(e.target.value)}
+                    placeholder="Description (optional)"
+                    style={{
+                      width: '100%', padding: '6px 10px', background: '#080c10',
+                      border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px',
+                      color: '#e0e0e0', fontSize: '0.78rem', marginBottom: '6px',
+                    }}
+                  />
+                  <button
+                    onClick={createRoom}
+                    style={{
+                      width: '100%', padding: '6px', background: '#2ecc71', color: '#000',
+                      border: 'none', borderRadius: '6px', fontWeight: 700, fontSize: '0.78rem',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Create Room
+                  </button>
+                </div>
+              )}
+
+              {/* DMS SECTION */}
+              <div style={{ padding: '10px 16px 4px', fontSize: '0.65rem', color: '#8ca59b', letterSpacing: '1.5px', fontWeight: 700, textTransform: 'uppercase' as const }}>
+                Direct Messages
+              </div>
               {loading ? (
                 <Conversation name="Loading..." />
               ) : conversations.length === 0 ? (
@@ -170,10 +308,10 @@ export function MessagesClient({ userId }: { userId: string }) {
                       conv.lastMessage ? timeAgo(conv.lastMessage.createdAt) : undefined
                     }
                     unreadCnt={conv.hasUnread ? 1 : 0}
-                    active={conv.id === activeConv}
-                    onClick={() => setActiveConv(conv.id)}
+                    active={conv.id === activeConv && activeType === 'dm'}
+                    onClick={() => { setActiveConv(conv.id); setActiveType('dm'); }}
                     style={{
-                      background: conv.id === activeConv ? 'rgba(0,230,150,0.1)' : 'transparent',
+                      background: conv.id === activeConv && activeType === 'dm' ? 'rgba(0,230,150,0.1)' : 'transparent',
                       borderBottom: '1px solid rgba(255,255,255,0.05)',
                     }}
                   >
