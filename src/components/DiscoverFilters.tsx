@@ -1,80 +1,33 @@
 'use client';
 
-import { Select } from '@/components/ui/Select';
-import { kebabCase, lowerCase, snakeCase, startCase, toUpper } from 'lodash';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { Item } from 'react-stately';
-import { DiscoverFilterKeys, DiscoverFilters as TDiscoverFilters } from '@/types/definitions';
-import { Key, useCallback } from 'react';
-
+/**
+ * Discover Filters — Case Builder HQ
+ * Replaces the dating-app gender/status filters with useful builder filters.
+ * These are cosmetic for now — will wire to real data when skills are structured.
+ */
 export function DiscoverFilters() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-
-  const filters = {
-    gender: searchParams.get('gender') || undefined,
-    relationshipStatus: searchParams.get('relationship-status') || undefined,
-  };
-  const genderFilters: string[] = ['MALE', 'FEMALE', 'NONBINARY'];
-  const relationshipStatusFilters: string[] = ['SINGLE', 'IN_A_RELATIONSHIP', 'ENGAGED', 'MARRIED'];
-
-  const updateParams = useCallback(
-    <T extends DiscoverFilterKeys>({ key, value }: { key: T; value: TDiscoverFilters[T] }) => {
-      const newSearchParams = new URLSearchParams(searchParams);
-
-      if (value === undefined) {
-        newSearchParams.delete(key);
-      } else {
-        newSearchParams.set(key, kebabCase(value));
-      }
-
-      const url = `${pathname}?${newSearchParams.toString()}`;
-      router.push(url, { scroll: false });
-    },
-    [pathname, router, searchParams],
-  );
-  const onSelectGender = useCallback(
-    (value: Key) => {
-      updateParams({
-        key: 'gender',
-        value: value as TDiscoverFilters['gender'],
-      });
-    },
-    [updateParams],
-  );
-  const onSelectRelationshipStatus = useCallback(
-    (value: Key) => {
-      updateParams({
-        key: 'relationship-status',
-        value: value as TDiscoverFilters['relationship-status'],
-      });
-    },
-    [updateParams],
-  );
-
   return (
-    <div className="mb-6 flex flex-col gap-4 sm:flex-row">
-      <div className="flex-1">
-        <Select
-          label="Filter by Gender"
-          selectedKey={toUpper(snakeCase(filters.gender)) || null}
-          onSelectionChange={onSelectGender}>
-          {genderFilters.map((gender) => (
-            <Item key={gender}>{startCase(lowerCase(gender))}</Item>
-          ))}
-        </Select>
-      </div>
-      <div className="flex-1">
-        <Select
-          label="Filter by Status"
-          selectedKey={toUpper(snakeCase(filters.relationshipStatus)) || null}
-          onSelectionChange={onSelectRelationshipStatus}>
-          {relationshipStatusFilters.map((relationship) => (
-            <Item key={relationship}>{startCase(lowerCase(relationship))}</Item>
-          ))}
-        </Select>
-      </div>
+    <div className="mb-6 flex flex-wrap gap-2">
+      {[
+        'All Builders',
+        'Legal / Pro Se',
+        'Developers',
+        'Pattern Analysts',
+        'Investigators',
+        'Media / Content',
+        'Contractors',
+      ].map((label, i) => (
+        <button
+          key={label}
+          className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+            i === 0
+              ? 'border-primary/40 bg-primary/10 text-primary'
+              : 'border-border/40 text-muted-foreground hover:border-primary/30 hover:text-primary'
+          }`}
+        >
+          {label}
+        </button>
+      ))}
     </div>
   );
 }
