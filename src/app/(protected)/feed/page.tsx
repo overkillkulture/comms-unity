@@ -5,7 +5,7 @@ import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
 import { getServerUser } from '@/lib/getServerUser';
 
 export const metadata = {
-  title: 'Community | Feed',
+  title: 'Case Builder HQ | Feed',
 };
 
 export default async function Page() {
