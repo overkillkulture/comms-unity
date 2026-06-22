@@ -83,6 +83,52 @@ export function MenuBar() {
             New Post
           </button>
         )}
+
+        {/* HQ TOOLS — Case Builder Toolkit */}
+        <div className="mt-4 w-full border-t border-border/20 pt-3">
+          <div className="mb-2 px-4 text-[0.6rem] font-bold uppercase tracking-[0.15em] text-emerald-500/60">
+            HQ Tools
+          </div>
+          {[
+            { emoji: '⚡', label: 'ARAYA', href: 'https://conciousnessrevolution.io/araya-chat.html' },
+            { emoji: '📁', label: 'Filing Cabinet', href: 'https://conciousnessrevolution.io/doc-vault.html' },
+            { emoji: '🎵', label: 'Music', href: 'https://conciousnessrevolution.io/music-store.html' },
+            { emoji: '🧠', label: 'Case Crunch', href: 'https://conciousnessrevolution.io/guardian/case-crunch.html' },
+            { emoji: '📸', label: 'Evidence Snap', href: 'https://conciousnessrevolution.io/guardian/evidence-snap.html' },
+            { emoji: '🔍', label: 'Pattern Library', href: 'https://conciousnessrevolution.io/guardian/patterns-library.html' },
+            { emoji: '📊', label: 'Actor Network', href: 'https://conciousnessrevolution.io/guardian/pattern-analysis.html' },
+            { emoji: '⚖️', label: 'Court Library', href: 'https://conciousnessrevolution.io/guardian/family-court-library.html' },
+            { emoji: '📋', label: 'Case Dashboard', href: 'https://conciousnessrevolution.io/guardian/case-dashboard.html' },
+          ].map((tool) => (
+            <a
+              key={tool.label}
+              href={tool.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2.5 rounded-lg px-4 py-1.5 text-sm text-muted-foreground transition-all hover:bg-emerald-500/10 hover:text-emerald-400"
+            >
+              <span className="w-5 text-center text-base">{tool.emoji}</span>
+              <span>{tool.label}</span>
+            </a>
+          ))}
+
+          {/* Empty dev slots */}
+          <div className="mt-2 border-t border-border/10 pt-2">
+            <div className="mb-1 px-4 text-[0.55rem] font-bold uppercase tracking-[0.15em] text-muted-foreground/40">
+              Dev Slots
+            </div>
+            {[1, 2, 3].map((n) => (
+              <div
+                key={n}
+                className="flex items-center gap-2.5 rounded-lg px-4 py-1.5 text-sm text-muted-foreground/30 transition-all hover:bg-primary-accent/10 hover:text-muted-foreground/60"
+              >
+                <span className="w-5 text-center text-base">🔧</span>
+                <span className="italic">Empty slot #{n}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <a
           href="https://conciousnessrevolution.io"
           target="_blank"

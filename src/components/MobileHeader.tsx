@@ -11,22 +11,30 @@ export function MobileHeader() {
         <Feather className="h-8 w-8 stroke-primary" />
         <LogoText className="text-xl" />
       </Link>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <a
-          href="https://conciousnessrevolution.io"
+          href="https://conciousnessrevolution.io/guardian/case-crunch.html"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-secondary-accent"
+          className="rounded-lg bg-emerald-500/15 px-2.5 py-1.5 text-xs font-bold text-emerald-400 transition-colors hover:bg-emerald-500/25"
         >
-          Main Site
+          Crunch
         </a>
         <a
-          href="https://conciousnessrevolution.io/araya.html"
+          href="https://conciousnessrevolution.io/araya-chat.html"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-primary/15 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/25"
+          className="rounded-lg bg-primary/15 px-2.5 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary/25"
         >
           ARAYA
+        </a>
+        <a
+          href="https://conciousnessrevolution.io/guardian/case-dashboard.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-lg bg-secondary px-2.5 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-secondary-accent"
+        >
+          Cases
         </a>
       </div>
     </div>
