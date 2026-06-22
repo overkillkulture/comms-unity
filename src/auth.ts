@@ -56,7 +56,7 @@ export const {
   },
   callbacks: {
     ...authConfig.callbacks,
-    async signIn({ user, account }) {
+    async signIn({ user, account }): Promise<boolean> {
       // INVITE-ONLY MODE: only whitelisted users can sign in
       if (process.env.INVITE_ONLY === 'true') {
         const allowList = (process.env.ALLOWED_USERS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
@@ -69,8 +69,7 @@ export const {
         if (allowList.includes(email) || allowList.includes(name) || allowList.includes(githubUsername)) {
           return true;
         }
-        // Block with message
-        return '/login?error=InviteOnly';
+        return false;
       }
       return true;
     },

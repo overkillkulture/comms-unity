@@ -1,8 +1,11 @@
 import { UserAuthForm } from '../UserAuthForm';
 import { InviteOnlyBanner } from './InviteOnlyBanner';
 
+const instanceName = process.env.INSTANCE_NAME || 'Sovereign Server';
+const isHQ = process.env.INVITE_ONLY === 'true';
+
 export const metadata = {
-  title: 'Case Builder HQ — Join',
+  title: isHQ ? 'Case Builder HQ — Join' : `${instanceName} — Join`,
 };
 
 export default function Page() {
@@ -10,9 +13,15 @@ export default function Page() {
     <>
       {/* Logo / Brand */}
       <div className="mb-6 text-center">
-        <div className="mb-1 text-4xl font-bold text-primary">
-          Case Builder<span className="text-foreground/40 text-2xl ml-1">HQ</span>
-        </div>
+        {isHQ ? (
+          <div className="mb-1 text-4xl font-bold text-primary">
+            Case Builder<span className="text-foreground/40 text-2xl ml-1">HQ</span>
+          </div>
+        ) : (
+          <div className="mb-1 text-4xl font-bold text-primary">
+            {instanceName}
+          </div>
+        )}
         <p className="text-[0.6rem] tracking-[0.2em] text-muted-foreground/40">
           SOVEREIGN SERVER
         </p>
@@ -21,17 +30,28 @@ export default function Page() {
       {/* What is this */}
       <div className="mb-6 rounded-lg border border-primary/15 bg-card p-4 text-center">
         <p className="text-sm leading-relaxed text-card-foreground">
-          Secure workspace for case builders. Upload evidence, find patterns,
-          coordinate strategy, and file with the court — together.
+          {isHQ
+            ? 'Secure workspace for case builders. Upload evidence, find patterns, coordinate strategy, and file with the court — together.'
+            : 'Open workspace for builders. Post what you\'re building. Find people who build what you need. Fork it, break it, make it better.'}
         </p>
       </div>
 
       {/* Tools */}
       <div className="mb-6 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
-        <span className="rounded-full border border-primary/20 px-2.5 py-1 text-primary">AI Crunch</span>
-        <span className="rounded-full border border-emerald-400/20 px-2.5 py-1 text-emerald-400">Pattern Library</span>
-        <span className="rounded-full border border-purple-400/20 px-2.5 py-1 text-purple-400">Private Rooms</span>
-        <span className="rounded-full border border-foreground/20 px-2.5 py-1">Evidence Snap</span>
+        {isHQ ? (
+          <>
+            <span className="rounded-full border border-primary/20 px-2.5 py-1 text-primary">AI Crunch</span>
+            <span className="rounded-full border border-emerald-400/20 px-2.5 py-1 text-emerald-400">Pattern Library</span>
+            <span className="rounded-full border border-purple-400/20 px-2.5 py-1 text-purple-400">Private Rooms</span>
+            <span className="rounded-full border border-foreground/20 px-2.5 py-1">Evidence Snap</span>
+          </>
+        ) : (
+          <>
+            <span className="rounded-full border border-primary/20 px-2.5 py-1 text-primary">Social Feed</span>
+            <span className="rounded-full border border-purple-400/20 px-2.5 py-1 text-purple-400">Direct Messages</span>
+            <span className="rounded-full border border-foreground/20 px-2.5 py-1">Open Source</span>
+          </>
+        )}
       </div>
 
       <InviteOnlyBanner />
