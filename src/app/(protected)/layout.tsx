@@ -10,7 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   await useCheckIfRequiredFieldsArePopulated();
 
   return (
-    <div className="flex min-h-screen flex-col md:flex-row md:justify-center md:gap-2">
+    <div className="flex min-h-screen flex-col md:flex-row">
       <MobileHeader />
       <MenuBar />
 

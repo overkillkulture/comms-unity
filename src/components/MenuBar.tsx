@@ -63,7 +63,7 @@ export function MenuBar() {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden md:sticky md:top-0 md:flex md:h-screen md:w-[212px] md:flex-col md:items-start md:p-4">
+      <div className="hidden md:sticky md:top-0 md:flex md:h-screen md:w-[220px] md:flex-shrink-0 md:flex-col md:items-start md:overflow-y-auto md:border-r md:border-border/20 md:p-4">
         <Link href="/feed" title="Home" className="mb-2 flex items-center gap-2">
           <Feather className="h-10 w-10 stroke-primary" />
           <LogoText className="text-2xl" />
