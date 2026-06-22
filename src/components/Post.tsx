@@ -1,4 +1,5 @@
 'use client';
+import { apiUrl } from '@/lib/apiUrl';
 
 import { memo, useCallback, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
@@ -34,7 +35,7 @@ export const Post = memo(
     const { data, isPending, isError } = useQuery<GetPost>({
       queryKey: ['posts', postId],
       queryFn: async () => {
-        const res = await fetch(`/api/posts/${postId}`);
+        const res = await fetch(apiUrl(`/api/posts/${postId}`));
         if (!res.ok) {
           throw new Error('Error getting post');
         }

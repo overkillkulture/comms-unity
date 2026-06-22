@@ -1,10 +1,11 @@
+import { apiUrl } from '@/lib/apiUrl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GetUser } from '@/types/definitions';
 import { useSession } from 'next-auth/react';
 import { useToast } from '../useToast';
 
 const follow = async ({ userId, targetUserId }: { userId: string; targetUserId: string }) => {
-  const res = await fetch(`/api/users/${userId}/following`, {
+  const res = await fetch(apiUrl(`/api/users/${userId}/following`), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -19,7 +20,7 @@ const follow = async ({ userId, targetUserId }: { userId: string; targetUserId: 
 };
 
 const unFollow = async ({ userId, targetUserId }: { userId: string; targetUserId: string }) => {
-  const res = await fetch(`/api/users/${userId}/following/${targetUserId}`, {
+  const res = await fetch(apiUrl(`/api/users/${userId}/following/${targetUserId}`), {
     method: 'DELETE',
   });
 

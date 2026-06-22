@@ -1,3 +1,4 @@
+import { apiUrl } from '@/lib/apiUrl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GetComment } from '@/types/definitions';
 import { useErrorNotifier } from '../useErrorNotifier';
@@ -10,7 +11,7 @@ export function useCreateCommentMutations() {
 
   const createCommentMutation = useMutation({
     mutationFn: async ({ postId, content }: { postId: number; content: string }) => {
-      const res = await fetch(`/api/posts/${postId}/comments`, {
+      const res = await fetch(apiUrl(`/api/posts/${postId}/comments`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +42,7 @@ export function useCreateCommentMutations() {
 
   const createReplyMutation = useMutation({
     mutationFn: async ({ parentId, content }: { parentId: number; content: string }) => {
-      const res = await fetch(`/api/comments/${parentId}/replies`, {
+      const res = await fetch(apiUrl(`/api/comments/${parentId}/replies`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

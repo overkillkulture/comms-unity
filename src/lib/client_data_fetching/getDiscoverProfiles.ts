@@ -1,3 +1,4 @@
+import { apiUrl } from '@/lib/apiUrl';
 import { DISCOVER_PROFILES_PER_PAGE } from '@/constants';
 import { GetUser } from '@/types/definitions';
 import { ReadonlyURLSearchParams } from 'next/navigation';
@@ -20,7 +21,7 @@ export async function getDiscoverProfiles({
   if (followersOf) params.set('followers-of', followersOf);
   if (followingOf) params.set('following-of', followingOf);
 
-  const res = await fetch(`/api/users?${params.toString()}`);
+  const res = await fetch(apiUrl(`/api/users?${params.toString()}`));
 
   if (!res.ok) throw new Error('Error fetching discover profiles.');
   return (await res.json()) as GetUser[];

@@ -114,30 +114,21 @@ export function MenuBar() {
             </a>
           ))}
 
-          {/* COMING SOON — outlined spots */}
-          <div className="mt-2 border-t border-border/10 pt-2">
-            <div className="mb-1 px-4 text-[0.55rem] font-bold uppercase tracking-[0.15em] text-muted-foreground/40">
+          {/* COMING SOON — compact row */}
+          <div className="mt-2 border-t border-border/10 px-4 pt-2">
+            <div className="mb-1.5 text-[0.55rem] font-bold uppercase tracking-[0.15em] text-muted-foreground/30">
               Coming Soon
             </div>
-            {[
-              { emoji: '🗂️', label: 'Room Files', desc: 'Drop files per room' },
-              { emoji: '🎥', label: 'Video Rooms', desc: 'LiveKit voice + video' },
-              { emoji: '🌐', label: 'Actor Network', desc: 'Cross-case connections' },
-              { emoji: '📖', label: 'Case Playbook', desc: 'Win/loss database' },
-              { emoji: '🤖', label: 'AI Slot (BYOK)', desc: 'Bring your own AI key' },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="group flex items-center gap-2.5 rounded-lg px-4 py-1.5 text-sm text-muted-foreground/30 transition-all hover:bg-primary-accent/10"
-                title={item.desc}
-              >
-                <span className="w-5 text-center text-base opacity-40">{item.emoji}</span>
-                <span className="flex flex-col">
-                  <span className="text-muted-foreground/40 group-hover:text-muted-foreground/60">{item.label}</span>
-                  <span className="text-[0.55rem] text-muted-foreground/20">{item.desc}</span>
+            <div className="flex flex-wrap gap-1.5">
+              {['Room Files', 'Video', 'Actor Map', 'Playbook', 'BYOK AI'].map((label) => (
+                <span
+                  key={label}
+                  className="rounded-full border border-border/20 px-2 py-0.5 text-[0.6rem] text-muted-foreground/25"
+                >
+                  {label}
                 </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+import { apiUrl } from '@/lib/apiUrl';
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
 import { GetComment } from '@/types/definitions';
 import { useErrorNotifier } from '../useErrorNotifier';
@@ -9,7 +10,7 @@ export function useUpdateDeleteCommentMutations({ queryKey }: { queryKey: QueryK
 
   const updateCommentMutation = useMutation({
     mutationFn: async ({ commentId, content }: { commentId: number; content: string }) => {
-      const res = await fetch(`/api/comments/${commentId}`, {
+      const res = await fetch(apiUrl(`/api/comments/${commentId}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ export function useUpdateDeleteCommentMutations({ queryKey }: { queryKey: QueryK
 
   const deleteCommentMutation = useMutation({
     mutationFn: async ({ commentId }: { commentId: number }) => {
-      const res = await fetch(`/api/comments/${commentId}`, {
+      const res = await fetch(apiUrl(`/api/comments/${commentId}`), {
         method: 'DELETE',
       });
 

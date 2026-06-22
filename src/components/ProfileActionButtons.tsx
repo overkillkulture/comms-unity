@@ -1,4 +1,5 @@
 'use client';
+import { apiUrl } from '@/lib/apiUrl';
 
 import Button from '@/components/ui/Button';
 import { Mail } from '@/svg_components';
@@ -25,7 +26,7 @@ export function ProfileActionButtons({ targetUserId }: { targetUserId: string })
 
   const handleMessage = useCallback(async () => {
     // Create or find existing DM conversation, then navigate to messages
-    const res = await fetch('/api/conversations', {
+    const res = await fetch(apiUrl('/api/conversations'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ targetUserId, type: 'DM' }),

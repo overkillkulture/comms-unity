@@ -1,3 +1,4 @@
+import { apiUrl } from '@/lib/apiUrl';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { chunk } from 'lodash';
 import { useSession } from 'next-auth/react';
@@ -43,7 +44,7 @@ export function useWritePostMutations({
 
   const createPostMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/posts`, {
+      const res = await fetch(apiUrl(`/api/posts`), {
         method: 'POST',
         body: await generateFormData(),
       });
@@ -89,7 +90,7 @@ export function useWritePostMutations({
 
   const updatePostMutation = useMutation({
     mutationFn: async ({ postId }: { postId: number }) => {
-      const res = await fetch(`/api/posts/${postId}`, {
+      const res = await fetch(apiUrl(`/api/posts/${postId}`), {
         method: 'PATCH',
         body: await generateFormData(),
       });

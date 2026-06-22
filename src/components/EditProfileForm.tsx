@@ -1,6 +1,7 @@
 /* eslint-disable react-perf/jsx-no-new-function-as-prop */
 
 'use client';
+import { apiUrl } from '@/lib/apiUrl';
 
 import { Controller, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -95,7 +96,7 @@ export function EditProfileForm({ redirectTo }: { redirectTo?: string }) {
 
     setSavingLinks(true);
     try {
-      await fetch(`/api/users/${userId}/portfolio`, {
+      await fetch(apiUrl(`/api/users/${userId}/portfolio`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ links: validLinks }),

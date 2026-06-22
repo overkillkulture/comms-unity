@@ -1,3 +1,4 @@
+import { apiUrl } from '@/lib/apiUrl';
 import { ACTIVITIES_PER_PAGE } from '@/constants';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { chunk } from 'lodash';
@@ -12,7 +13,7 @@ export function useNotificationsReadStatusMutations() {
 
   const markAsReadMutation = useMutation({
     mutationFn: async ({ notificationId }: { notificationId: number }) => {
-      const res = await fetch(`/api/users/${session?.user.id}/notifications/${notificationId}`, {
+      const res = await fetch(apiUrl(`/api/users/${session?.user.id}/notifications/${notificationId}`), {
         method: 'PATCH',
       });
 
@@ -62,7 +63,7 @@ export function useNotificationsReadStatusMutations() {
 
   const markAllAsReadMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/users/${session?.user.id}/notifications`, {
+      const res = await fetch(apiUrl(`/api/users/${session?.user.id}/notifications`), {
         method: 'PATCH',
       });
 

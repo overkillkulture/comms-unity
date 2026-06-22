@@ -1,4 +1,5 @@
 'use client';
+import { apiUrl } from '@/lib/apiUrl';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
@@ -76,8 +77,8 @@ export function MessagesClient({ userId }: { userId: string }) {
   const loadConversations = useCallback(async () => {
     try {
       const [convRes, roomRes] = await Promise.all([
-        fetch('/api/conversations'),
-        fetch('/api/rooms'),
+        fetch(apiUrl('/api/conversations')),
+        fetch(apiUrl('/api/rooms')),
       ]);
       if (convRes.ok) {
         const data = await convRes.json();
@@ -97,7 +98,7 @@ export function MessagesClient({ userId }: { userId: string }) {
   const createRoom = useCallback(async () => {
     if (!newRoomName.trim()) return;
     try {
-      const res = await fetch('/api/rooms', {
+      const res = await fetch(apiUrl('/api/rooms'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newRoomName, description: newRoomDesc }),
@@ -119,7 +120,7 @@ export function MessagesClient({ userId }: { userId: string }) {
   // Load messages for active conversation
   const loadMessages = useCallback(async (convId: number) => {
     try {
-      const res = await fetch(`/api/conversations/${convId}/messages`);
+      const res = await fetch(apiUrl(`/api/conversations/${convId}/messages`));
       if (res.ok) {
         const data = await res.json();
         setMessages(data);
@@ -162,7 +163,7 @@ export function MessagesClient({ userId }: { userId: string }) {
       setMessages((prev) => [...prev, optimistic]);
 
       try {
-        const res = await fetch(`/api/conversations/${activeConv}/messages`, {
+        const res = await fetch(apiUrl(`/api/conversations/${activeConv}/messages`), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ content: text }),

@@ -5,7 +5,7 @@ import SvgSearch from '@/svg_components/Search';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
-export function DiscoverSearch({ label = 'Search People' }: { label?: string }) {
+export function DiscoverSearch({ label = 'Search Builders' }: { label?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();

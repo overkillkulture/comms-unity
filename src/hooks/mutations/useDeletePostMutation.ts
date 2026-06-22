@@ -1,4 +1,5 @@
 'use client';
+import { apiUrl } from '@/lib/apiUrl';
 
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { chunk } from 'lodash';
@@ -15,7 +16,7 @@ export function useDeletePostMutation() {
 
   const deleteMutation = useMutation({
     mutationFn: async ({ postId }: { postId: number }) => {
-      const res = await fetch(`/api/posts/${postId}`, {
+      const res = await fetch(apiUrl(`/api/posts/${postId}`), {
         method: 'DELETE',
       });
 

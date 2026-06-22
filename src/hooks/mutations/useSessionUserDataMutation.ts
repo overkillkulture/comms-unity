@@ -1,3 +1,4 @@
+import { apiUrl } from '@/lib/apiUrl';
 import { UserAboutSchema } from '@/lib/validations/userAbout';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
@@ -16,7 +17,7 @@ export function useSessionUserDataMutation() {
 
   const updateSessionUserDataMutation = useMutation({
     mutationFn: async ({ data }: { data: UserAboutSchema }) => {
-      const res = await fetch(`/api/users/${userId}`, {
+      const res = await fetch(apiUrl(`/api/users/${userId}`), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +48,7 @@ export function useSessionUserDataMutation() {
 
   const updateSessionUserPhotosMutation = useMutation({
     mutationFn: async ({ toUpdate, formData }: { toUpdate: 'profile' | 'cover'; formData: FormData }) => {
-      const res = await fetch(`/api/users/${userId}/${toUpdate === 'profile' ? 'profile-photo' : 'cover-photo'}`, {
+      const res = await fetch(apiUrl(`/api/users/${userId}/${toUpdate === 'profile' ? 'profile-photo' : 'cover-photo'}`), {
         method: 'POST',
         body: formData,
       });

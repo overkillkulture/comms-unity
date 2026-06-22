@@ -1,4 +1,5 @@
 'use client';
+import { apiUrl } from '@/lib/apiUrl';
 
 import { InfiniteData, QueryKey, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { GetPost, PostIds } from '@/types/definitions';
@@ -34,7 +35,7 @@ export function PublicPosts() {
       params.set('cursor', cursor.toString());
       params.set('sort-direction', 'desc');
 
-      const res = await fetch(`/api/posts?${params.toString()}`);
+      const res = await fetch(apiUrl(`/api/posts?${params.toString()}`));
       if (!res.ok) throw Error('Failed to load posts.');
       const posts = (await res.json()) as GetPost[];
 

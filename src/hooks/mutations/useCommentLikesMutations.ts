@@ -1,3 +1,4 @@
+import { apiUrl } from '@/lib/apiUrl';
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { GetComment } from '@/types/definitions';
@@ -34,7 +35,7 @@ export function useCommentLikesMutations({ queryKey }: { queryKey: QueryKey }) {
 
   const likeCommentMutation = useMutation({
     mutationFn: async ({ commentId }: { commentId: number }) => {
-      const res = await fetch(`/api/users/${userId}/liked-comments`, {
+      const res = await fetch(apiUrl(`/api/users/${userId}/liked-comments`), {
         method: 'POST',
         body: JSON.stringify({ commentId }),
         headers: {
@@ -74,7 +75,7 @@ export function useCommentLikesMutations({ queryKey }: { queryKey: QueryKey }) {
 
   const unLikeCommentMutation = useMutation({
     mutationFn: async ({ commentId }: { commentId: number }) => {
-      const res = await fetch(`/api/users/${userId}/liked-comments/${commentId}`, {
+      const res = await fetch(apiUrl(`/api/users/${userId}/liked-comments/${commentId}`), {
         method: 'DELETE',
       });
 
