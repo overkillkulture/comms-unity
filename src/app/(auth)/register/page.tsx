@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { UserAuthForm } from '../UserAuthForm';
 
 export const metadata = {
-  title: 'Munia | Register',
+  title: 'Case Builder HQ | Register',
 };
 
 export default function Page() {

@@ -64,10 +64,13 @@ export function MenuBar() {
 
       {/* Desktop sidebar */}
       <div className="hidden md:sticky md:top-0 md:flex md:h-screen md:w-[212px] md:flex-col md:items-start md:p-4">
-        <Link href="/feed" title="Home" className="mb-4 flex items-center gap-2">
-          <Feather className="h-12 w-12 stroke-primary" />
-          <LogoText className="text-3xl" />
+        <Link href="/feed" title="Home" className="mb-2 flex items-center gap-2">
+          <Feather className="h-10 w-10 stroke-primary" />
+          <LogoText className="text-2xl" />
         </Link>
+        <div className="mb-3 px-1 text-[0.5rem] font-medium tracking-[0.2em] text-muted-foreground/30">
+          SOVEREIGN SERVER
+        </div>
         {desktopItems.map((item) => (
           <MenuBarItem key={item.title} {...item}>
             {item.title}
@@ -142,9 +145,10 @@ export function MenuBar() {
           href="https://conciousnessrevolution.io"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-auto flex items-center gap-2 rounded-lg px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-primary-accent/30 hover:text-foreground"
+          className="mt-auto flex flex-col rounded-lg px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-primary-accent/30 hover:text-foreground"
         >
-          ← Main Site
+          <span className="text-[0.5rem] tracking-[0.15em] text-muted-foreground/30">SOVEREIGN SERVER</span>
+          <span>← Main Site</span>
         </a>
       </div>
 

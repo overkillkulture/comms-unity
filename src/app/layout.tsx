@@ -16,8 +16,28 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: 'Consciousness Revolution — Community',
-  description: 'Build systems that turn survival into sovereignty. 3 → 7 → 13 → ∞',
+  title: 'Case Builder HQ — Sovereign Server',
+  description: 'Secure workspace for case builders. Upload evidence. Find patterns. File with the court. Powered by Sovereign Server.',
+  openGraph: {
+    title: 'Case Builder HQ',
+    description: 'Secure workspace for case builders. AI-powered pattern recognition, evidence management, and court filing tools.',
+    siteName: 'Sovereign Server',
+    type: 'website',
+    images: [
+      {
+        url: 'https://conciousnessrevolution.io/images/og-case-builder-hq.png',
+        width: 1200,
+        height: 630,
+        alt: 'Case Builder HQ — Sovereign Server',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Case Builder HQ — Sovereign Server',
+    description: 'Secure workspace for case builders. AI crunch engine, pattern library, private rooms.',
+    images: ['https://conciousnessrevolution.io/images/og-case-builder-hq.png'],
+  },
 };
 
 export default async function Layout({ children }: { children: React.ReactNode }) {

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { MessagesClient } from './MessagesClient';
 
 export const metadata = {
-  title: 'COMMS-UNITY | Messages',
+  title: 'Case Builder HQ | Messages',
 };
 
 export default async function Page() {
