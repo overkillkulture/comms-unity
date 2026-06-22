@@ -3,6 +3,8 @@ import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import { NextResponse } from 'next/server';
 
+const isInviteOnly = process.env.INVITE_ONLY === 'true';
+
 export default {
   providers: [GitHub, Google],
   pages: {
@@ -13,25 +15,37 @@ export default {
       const { pathname, search } = nextUrl;
       const isLoggedIn = !!auth?.user;
       const isOnAuthPage = pathname.startsWith('/login') || pathname.startsWith('/register');
+      const isApiRoute = pathname.startsWith('/api/');
+      const isStaticAsset = pathname.startsWith('/_next/');
+
+      if (isInviteOnly) {
+        // INVITE-ONLY MODE — everything is locked except login page and API/assets
+        if (isApiRoute || isStaticAsset || pathname === '/terms') return true;
+        if (isOnAuthPage) {
+          if (isLoggedIn) return NextResponse.redirect(new URL('/messages', nextUrl));
+          return true;
+        }
+        // Not logged in → go to login (one click, no feed browsing)
+        if (!isLoggedIn) {
+          return NextResponse.redirect(new URL('/login', nextUrl));
+        }
+        // Logged in → let them through
+        return true;
+      }
 
       // OPEN COMMUNITY — let people browse without logging in
-      // Only require auth for setup/edit-profile pages
-      const protectedPages = ['/setup', '/edit-profile'];
+      const protectedPages = ['/setup', '/edit-profile', '/messages', '/notifications'];
       const isProtectedPage = protectedPages.some((page) => pathname.startsWith(page));
-      const isOnUnprotectedPage = !isProtectedPage;
 
       if (isOnAuthPage) {
-        // Redirect to /feed, if logged in and is on an auth page
         if (isLoggedIn) return NextResponse.redirect(new URL('/feed', nextUrl));
       } else if (isProtectedPage) {
-        // Redirect to /login, if not logged in but is on a protected page
         if (!isLoggedIn) {
-          const from = encodeURIComponent(pathname + search); // The /login page shall then use this `from` param as a `callbackUrl` upon successful sign in
+          const from = encodeURIComponent(pathname + search);
           return NextResponse.redirect(new URL(`/login?from=${from}`, nextUrl));
         }
       }
 
-      // Don't redirect if on an unprotected page, or if logged in and is on a protected page
       return true;
     },
   },
