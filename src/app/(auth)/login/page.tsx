@@ -1,4 +1,5 @@
 import { UserAuthForm } from '../UserAuthForm';
+import { InviteOnlyBanner } from './InviteOnlyBanner';
 
 export const metadata = {
   title: 'Case Builder HQ — Join',
@@ -33,6 +34,7 @@ export default function Page() {
         <span className="rounded-full border border-foreground/20 px-2.5 py-1">Evidence Snap</span>
       </div>
 
+      <InviteOnlyBanner />
       <UserAuthForm mode="login" />
 
       <p className="mt-4 text-center text-xs text-muted-foreground">

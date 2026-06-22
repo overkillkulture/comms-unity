@@ -56,6 +56,24 @@ export const {
   },
   callbacks: {
     ...authConfig.callbacks,
+    async signIn({ user, account }) {
+      // INVITE-ONLY MODE: only whitelisted users can sign in
+      if (process.env.INVITE_ONLY === 'true') {
+        const allowList = (process.env.ALLOWED_USERS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+        // If no allowlist configured, let everyone in (fail-open for setup)
+        if (allowList.length === 0) return true;
+        const email = (user.email || '').toLowerCase();
+        const name = (user.name || '').toLowerCase().replace(/\s+/g, '-');
+        // Check email, username-style name, or GitHub username
+        const githubUsername = (account?.providerAccountId || '').toLowerCase();
+        if (allowList.includes(email) || allowList.includes(name) || allowList.includes(githubUsername)) {
+          return true;
+        }
+        // Block with message
+        return '/login?error=InviteOnly';
+      }
+      return true;
+    },
     session({ token, user, ...rest }) {
       return {
         user: {
