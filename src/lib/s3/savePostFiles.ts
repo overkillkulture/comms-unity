@@ -28,7 +28,7 @@ export async function savePostFiles(files: (Blob | string)[]) {
     const fileExtension = file.type.split('/')[1];
     const buffer = Buffer.from(await file.arrayBuffer());
     const fileName = `${Date.now()}-${uuid()}.${fileExtension}`;
-    await uploadObject(buffer, fileName, fileExtension);
+    await uploadObject(buffer, fileName, file.type);
 
     return { type, fileName };
   });

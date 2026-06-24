@@ -11,12 +11,20 @@ export function MobileHeader() {
         <Feather className="h-8 w-8 stroke-primary" />
         <LogoText className="text-xl" />
       </Link>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
+        <a
+          href="https://conciousnessrevolution.io/guardian/patterns-library.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-lg bg-emerald-500/15 px-2 py-1.5 text-xs font-bold text-emerald-400 transition-colors hover:bg-emerald-500/25"
+        >
+          Patterns
+        </a>
         <a
           href="https://conciousnessrevolution.io/guardian/case-crunch.html"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-emerald-500/15 px-2.5 py-1.5 text-xs font-bold text-emerald-400 transition-colors hover:bg-emerald-500/25"
+          className="rounded-lg bg-purple-500/15 px-2 py-1.5 text-xs font-bold text-purple-400 transition-colors hover:bg-purple-500/25"
         >
           Crunch
         </a>
@@ -24,17 +32,17 @@ export function MobileHeader() {
           href="https://conciousnessrevolution.io/araya-chat.html"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-primary/15 px-2.5 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary/25"
+          className="rounded-lg bg-primary/15 px-2 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary/25"
         >
           ARAYA
         </a>
         <a
-          href="https://conciousnessrevolution.io/guardian/case-dashboard.html"
+          href="https://conciousnessrevolution.io/case.html"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-secondary px-2.5 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-secondary-accent"
+          className="rounded-lg bg-secondary px-2 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-secondary-accent"
         >
-          Cases
+          Case
         </a>
       </div>
     </div>

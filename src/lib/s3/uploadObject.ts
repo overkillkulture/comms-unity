@@ -1,14 +1,15 @@
 import 'server-only';
-import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { s3Client } from './s3Client';
+import { supabase, STORAGE_BUCKET } from './s3Client';
 
-export async function uploadObject(file: Buffer, fileName: string, type: string) {
-  const command = new PutObjectCommand({
-    Bucket: process.env.S3_BUCKET_NAME,
-    Key: fileName,
-    Body: file,
-    ContentType: type,
-  });
+export async function uploadObject(file: Buffer, fileName: string, contentType: string) {
+  const { error } = await supabase.storage
+    .from(STORAGE_BUCKET)
+    .upload(fileName, file, {
+      contentType,
+      upsert: false,
+    });
 
-  await s3Client.send(command);
+  if (error) {
+    throw new Error(`Supabase upload failed: ${error.message}`);
+  }
 }

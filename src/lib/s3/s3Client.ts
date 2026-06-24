@@ -1,11 +1,10 @@
 import 'server-only';
-import { S3Client } from '@aws-sdk/client-s3';
+import { createClient } from '@supabase/supabase-js';
 
-// https://github.com/aws/aws-sdk-net/issues/1713
-export const s3Client = new S3Client({
-  region: process.env.AWS_REGION as string,
-  credentials: {
-    accessKeyId: process.env.S3_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string,
-  },
-});
+// Supabase client for storage operations (replaces S3)
+export const supabase = createClient(
+  process.env.SUPABASE_URL as string,
+  process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+);
+
+export const STORAGE_BUCKET = 'hq-posts';
