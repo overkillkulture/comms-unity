@@ -28,7 +28,8 @@ export function VideoRoom({ roomId, displayName, onClose }: VideoRoomProps) {
   const initJitsi = useCallback(() => {
     if (!containerRef.current || apiRef.current) return;
 
-    const domain = 'meet.jit.si';
+    // meet.jit.si now requires auth for moderators — use 8x8.vc (free, no login needed)
+    const domain = '8x8.vc';
     const options = {
       roomName: jitsiRoomName,
       parentNode: containerRef.current,
@@ -39,6 +40,11 @@ export function VideoRoom({ roomId, displayName, onClose }: VideoRoomProps) {
         startWithVideoMuted: false,
         prejoinPageEnabled: false,
         disableDeepLinking: true,
+        // Disable lobby/moderator gate so anyone can join immediately
+        lobby: { enabled: false },
+        enableLobbyChat: false,
+        hideLobbyButton: true,
+        requireDisplayName: false,
         toolbarButtons: [
           'microphone', 'camera', 'desktop', 'fullscreen',
           'chat', 'raisehand', 'tileview', 'hangup',
@@ -82,7 +88,7 @@ export function VideoRoom({ roomId, displayName, onClose }: VideoRoomProps) {
 
     const script = document.createElement('script');
     script.id = 'jitsi-api-script';
-    script.src = 'https://meet.jit.si/external_api.js';
+    script.src = 'https://8x8.vc/external_api.js';
     script.async = true;
     script.onload = () => initJitsi();
     document.head.appendChild(script);
