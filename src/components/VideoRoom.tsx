@@ -51,7 +51,7 @@ export function VideoRoom({ roomId, displayName, onClose }: VideoRoomProps) {
     }
 
     try {
-      const api = new (window as any).JitsiMeetExternalAPI('8x8.vc', {
+      const api = new (window as any).JitsiMeetExternalAPI('jitsi.riot.im', {
         roomName: jitsiRoomName,
         parentNode: containerRef.current,
         width: '100%',
@@ -122,7 +122,7 @@ export function VideoRoom({ roomId, displayName, onClose }: VideoRoomProps) {
 
     const script = document.createElement('script');
     script.id = 'jitsi-api-script';
-    script.src = 'https://8x8.vc/external_api.js';
+    script.src = 'https://jitsi.riot.im/external_api.js';
     script.async = true;
     script.onload = () => initJitsi();
     script.onerror = () => {
