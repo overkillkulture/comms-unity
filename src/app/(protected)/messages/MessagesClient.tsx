@@ -345,8 +345,13 @@ export function MessagesClient({ userId }: { userId: string }) {
                   />
                   <ConversationHeader.Content>
                     <span style={{ color: '#dceae6', fontWeight: 600 }}>
-                      {activeConvData.name}
+                      {activeType === 'room' ? `# ${activeConvData.name}` : activeConvData.name}
                     </span>
+                    {'memberCount' in activeConvData && (
+                      <span style={{ color: '#6a8a7a', fontSize: '0.75rem', display: 'block' }}>
+                        {(activeConvData as RoomData).memberCount} member{(activeConvData as RoomData).memberCount !== 1 ? 's' : ''}
+                      </span>
+                    )}
                   </ConversationHeader.Content>
                   <ConversationHeader.Actions>
                     <VideoRoomButton
@@ -359,6 +364,39 @@ export function MessagesClient({ userId }: { userId: string }) {
                 <MessageList
                   style={{ background: '#080c10' }}
                 >
+                  {messages.length === 0 && (
+                    <MessageList.Content
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%',
+                        color: '#8ca59b',
+                        textAlign: 'center',
+                        padding: '20px',
+                      }}
+                    >
+                      <p style={{ fontSize: '2.5rem', marginBottom: '12px' }}>
+                        {activeType === 'room' ? '🏠' : '💬'}
+                      </p>
+                      <p style={{ fontSize: '1.1rem', fontWeight: 600, color: '#dceae6', marginBottom: '6px' }}>
+                        {activeType === 'room'
+                          ? `Welcome to # ${activeConvData.name}`
+                          : `Chat with ${activeConvData.name}`}
+                      </p>
+                      <p style={{ fontSize: '0.85rem', opacity: 0.6, maxWidth: '320px', lineHeight: 1.5 }}>
+                        {activeType === 'room'
+                          ? 'This room is ready. Type a message below to get started. Invite other builders to collaborate.'
+                          : 'Send a message to start the conversation.'}
+                      </p>
+                      {'description' in activeConvData && (activeConvData as RoomData).description && (
+                        <p style={{ fontSize: '0.8rem', opacity: 0.4, marginTop: '8px', fontStyle: 'italic' }}>
+                          {(activeConvData as RoomData).description}
+                        </p>
+                      )}
+                    </MessageList.Content>
+                  )}
                   {messages.map((msg) => (
                     <Message
                       key={msg.id}
