@@ -29,19 +29,33 @@ export const {
         const name = credentials?.name as string;
         if (!name || name.trim().length < 1) return null;
 
-        const username = name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const input = name.trim();
+        const isEmail = input.includes('@') && input.includes('.');
+        const username = input.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-@.]/g, '');
+        const email = isEmail ? input.toLowerCase() : `${username}@community.local`;
 
-        // Find or create user by username
+        // INVITE-ONLY: check input against allowlist before creating user
+        if (process.env.INVITE_ONLY === 'true') {
+          const allowList = (process.env.ALLOWED_USERS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+          if (allowList.length > 0) {
+            const slugName = input.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+            if (!allowList.includes(email) && !allowList.includes(slugName) && !allowList.includes(input.toLowerCase())) {
+              return null;
+            }
+          }
+        }
+
+        // Find by email first, then username
         let user = await prisma.user.findFirst({
-          where: { username },
+          where: isEmail ? { email } : { username },
         });
 
         if (!user) {
           user = await prisma.user.create({
             data: {
-              username,
-              name: name.trim(),
-              email: `${username}@community.local`,
+              username: isEmail ? email.split('@')[0] : username,
+              name: isEmail ? email.split('@')[0] : input,
+              email,
             },
           });
         }

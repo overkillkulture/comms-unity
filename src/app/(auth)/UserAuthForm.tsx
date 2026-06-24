@@ -59,7 +59,7 @@ export function UserAuthForm({ mode }: { mode: 'login' | 'register' }) {
         <TextInput
           value={name}
           onChange={onNameChange}
-          label="Your Name"
+          label={process.env.NEXT_PUBLIC_INVITE_ONLY === 'true' ? "Your Email" : "Your Name"}
           Icon={Profile}
         />
       </div>
