@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Feather } from '@/svg_components';
 import { LogoText } from './LogoText';
+import { VideoRoomButton } from './VideoRoom';
 
 export function MobileHeader() {
   return (
@@ -12,11 +13,16 @@ export function MobileHeader() {
         <LogoText className="text-xl" />
       </Link>
       <div className="flex items-center gap-1.5">
+        <VideoRoomButton
+          roomId="hq-lobby"
+          label="Video"
+          className="rounded-lg bg-emerald-500/15 px-2 py-1.5 text-xs font-bold text-emerald-400 transition-colors hover:bg-emerald-500/25"
+        />
         <a
           href="https://conciousnessrevolution.io/guardian/patterns-library.html"
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-emerald-500/15 px-2 py-1.5 text-xs font-bold text-emerald-400 transition-colors hover:bg-emerald-500/25"
+          className="rounded-lg bg-cyan-500/15 px-2 py-1.5 text-xs font-bold text-cyan-400 transition-colors hover:bg-cyan-500/25"
         >
           Patterns
         </a>

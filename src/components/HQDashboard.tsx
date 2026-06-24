@@ -1,5 +1,7 @@
 'use client';
 
+import { VideoRoomButton } from './VideoRoom';
+
 /**
  * HQ Dashboard — The first thing builders see inside Case Builder HQ.
  * Action cards for pattern recognition tools, learning, and collaboration.
@@ -111,8 +113,13 @@ export function HQDashboard() {
         })}
       </div>
 
-      {/* Quick tools row */}
-      <div className="flex flex-wrap gap-2">
+      {/* Video + Quick tools row */}
+      <div className="flex flex-wrap items-center gap-2">
+        <VideoRoomButton
+          roomId="hq-lobby"
+          label="Video Room"
+          className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition-colors hover:bg-emerald-500/20"
+        />
         {quickTools.map((tool) => (
           <a
             key={tool.label}

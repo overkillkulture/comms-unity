@@ -16,6 +16,7 @@ import {
   ConversationHeader,
   TypingIndicator,
 } from '@chatscope/chat-ui-kit-react';
+import { VideoRoomButton } from '@/components/VideoRoom';
 
 interface UserSummary {
   id: string;
@@ -347,6 +348,12 @@ export function MessagesClient({ userId }: { userId: string }) {
                       {activeConvData.name}
                     </span>
                   </ConversationHeader.Content>
+                  <ConversationHeader.Actions>
+                    <VideoRoomButton
+                      roomId={`${activeType}-${activeConv}`}
+                      label="Video Call"
+                    />
+                  </ConversationHeader.Actions>
                 </ConversationHeader>
 
                 <MessageList

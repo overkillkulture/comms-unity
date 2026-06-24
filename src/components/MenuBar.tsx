@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useCallback } from 'react';
 import { LogoText } from './LogoText';
 import { MenuBarItem } from './MenuBarItem';
+import { VideoRoomButton } from './VideoRoom';
 
 export function MenuBar() {
   const [user] = useSessionUserData();
@@ -91,6 +92,13 @@ export function MenuBar() {
         <div className="mt-4 w-full overflow-y-auto border-t border-border/20 pt-3" style={{ maxHeight: 'calc(100vh - 420px)' }}>
           <div className="mb-2 px-4 text-[0.6rem] font-bold uppercase tracking-[0.15em] text-emerald-500/60">
             HQ Tools
+          </div>
+          <div className="mb-2 px-4">
+            <VideoRoomButton
+              roomId="hq-lobby"
+              label="Video Room"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500/15 px-3 py-2 text-sm font-bold text-emerald-400 transition-colors hover:bg-emerald-500/25"
+            />
           </div>
           {[
             { emoji: '⚡', label: 'ARAYA', href: 'https://conciousnessrevolution.io/araya-chat.html', live: true },
