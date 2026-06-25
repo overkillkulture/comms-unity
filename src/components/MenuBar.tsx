@@ -64,13 +64,13 @@ export function MenuBar() {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden md:sticky md:top-0 md:flex md:h-screen md:w-[220px] md:flex-shrink-0 md:flex-col md:items-start md:overflow-y-auto md:border-r md:border-border/20 md:p-4">
-        <Link href="/feed" title="Home" className="mb-2 flex items-center gap-2">
-          <Feather className="h-10 w-10 stroke-primary" />
-          <LogoText className="text-2xl" />
+      <div className="hidden md:sticky md:top-0 md:flex md:h-screen md:w-[200px] md:flex-shrink-0 md:flex-col md:items-start md:overflow-y-auto md:border-r md:border-border/20 md:p-3">
+        <Link href="/feed" title="Home" className="mb-1 flex items-center gap-2">
+          <Feather className="h-8 w-8 stroke-primary" />
+          <LogoText className="text-xl" />
         </Link>
-        <div className="mb-3 px-1 text-[0.5rem] font-medium tracking-[0.2em] text-muted-foreground/30">
-          SOVEREIGN SERVER
+        <div className="mb-2 px-1 text-[0.5rem] font-medium tracking-[0.2em] text-muted-foreground/30">
+          CASE BUILDER HQ
         </div>
         {desktopItems.map((item) => (
           <MenuBarItem key={item.title} {...item}>
@@ -146,7 +146,7 @@ export function MenuBar() {
           rel="noopener noreferrer"
           className="mt-auto flex flex-col rounded-lg px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-primary-accent/30 hover:text-foreground"
         >
-          <span className="text-[0.5rem] tracking-[0.15em] text-muted-foreground/30">SOVEREIGN SERVER</span>
+          <span className="text-[0.5rem] tracking-[0.15em] text-muted-foreground/30">CONSCIOUSNESS REVOLUTION</span>
           <span>← Main Site</span>
         </a>
       </div>
