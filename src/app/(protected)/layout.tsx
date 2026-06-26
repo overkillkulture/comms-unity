@@ -1,3 +1,4 @@
+import { BugReporter } from '@/components/BugReporter';
 import { MenuBar } from '@/components/MenuBar';
 import { MobileHeader } from '@/components/MobileHeader';
 import { ResponsiveContainer } from '@/components/ui/ResponsiveContainer';
@@ -15,6 +16,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
       <MenuBar />
 
       <ResponsiveContainer className="pb-20 md:pb-4">{children}</ResponsiveContainer>
+      <BugReporter />
     </div>
   );
 }
