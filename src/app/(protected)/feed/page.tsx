@@ -1,5 +1,6 @@
 import { CreatePostModalLauncher } from '@/components/CreatePostModalLauncher';
 import { HQDashboard } from '@/components/HQDashboard';
+import { HowItWorks } from '@/components/HowItWorks';
 import { Posts } from '@/components/Posts';
 import { PublicPosts } from '@/components/PublicPosts';
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
@@ -20,6 +21,7 @@ export default async function Page() {
         </div>
       </div>
       {user && <HQDashboard />}
+      {user && <HowItWorks />}
       {user && <CreatePostModalLauncher />}
       {user ? (
         <Posts type="feed" userId={user.id} />
