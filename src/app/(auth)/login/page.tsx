@@ -23,7 +23,7 @@ export default function Page() {
           </div>
         )}
         <p className="text-[0.6rem] tracking-[0.2em] text-muted-foreground/40">
-          SOVEREIGN SERVER
+          {isHQ ? 'PATTERN RECOGNITION FOR LEGAL SELF-DEFENSE' : 'SOVEREIGN SERVER'}
         </p>
       </div>
 
@@ -31,7 +31,7 @@ export default function Page() {
       <div className="mb-6 rounded-lg border border-primary/15 bg-card p-4 text-center">
         <p className="text-sm leading-relaxed text-card-foreground">
           {isHQ
-            ? 'Secure workspace for case builders. Upload evidence, find patterns, coordinate strategy, and file with the court — together.'
+            ? 'Open source tools for people fighting cases. Upload evidence, find patterns across cases, coordinate strategy, and file with the court — together.'
             : 'Open workspace for builders. Post what you\'re building. Find people who build what you need. Fork it, break it, make it better.'}
         </p>
       </div>
@@ -40,10 +40,10 @@ export default function Page() {
       <div className="mb-6 flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
         {isHQ ? (
           <>
-            <span className="rounded-full border border-primary/20 px-2.5 py-1 text-primary">AI Crunch</span>
+            <span className="rounded-full border border-primary/20 px-2.5 py-1 text-primary">AI Case Analysis</span>
             <span className="rounded-full border border-emerald-400/20 px-2.5 py-1 text-emerald-400">Pattern Library</span>
-            <span className="rounded-full border border-purple-400/20 px-2.5 py-1 text-purple-400">Private Rooms</span>
-            <span className="rounded-full border border-foreground/20 px-2.5 py-1">Evidence Snap</span>
+            <span className="rounded-full border border-purple-400/20 px-2.5 py-1 text-purple-400">Video Rooms</span>
+            <span className="rounded-full border border-orange-400/20 px-2.5 py-1 text-orange-400">Open Source</span>
           </>
         ) : (
           <>
@@ -62,9 +62,21 @@ export default function Page() {
         <a href="/terms" className="text-primary hover:underline" target="_blank">
           Terms
         </a>
-        {' · '}
-        The revolution doesn&apos;t need followers. It needs builders.
       </p>
+      {isHQ && (
+        <p className="mt-3 text-center text-xs text-muted-foreground/60">
+          <a
+            href="https://github.com/overkillkulture/comms-unity"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground/80 hover:text-primary hover:underline"
+          >
+            Fork it on GitHub
+          </a>
+          {' · '}
+          Free and open source
+        </p>
+      )}
     </>
   );
 }
