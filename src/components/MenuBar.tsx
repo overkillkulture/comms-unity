@@ -107,7 +107,7 @@ export function MenuBar() {
             { emoji: '📋', label: 'Case Dashboard', href: 'https://conciousnessrevolution.io/guardian/case-dashboard.html', live: true },
             { emoji: '🔍', label: 'Pattern Library', href: 'https://conciousnessrevolution.io/guardian/patterns-library.html', live: true },
             { emoji: '⚖️', label: 'Court Library', href: 'https://conciousnessrevolution.io/guardian/family-court-library.html', live: true },
-            { emoji: '📁', label: 'Filing Cabinet', href: 'https://conciousnessrevolution.io/doc-vault.html', live: true },
+            { emoji: '📁', label: 'Filing Library', href: 'https://conciousnessrevolution.io/guardian/family-court-library.html', live: true },
             { emoji: '🎵', label: 'Music', href: 'https://conciousnessrevolution.io/music-store.html', live: true },
           ].map((tool) => (
             <a
