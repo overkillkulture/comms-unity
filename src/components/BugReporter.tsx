@@ -50,10 +50,11 @@ export function BugReporter() {
 
   return (
     <>
-      {/* Floating bug button */}
+      {/* Floating bug button — top-right, CR-style gradient */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-20 left-4 z-[100] flex h-10 w-10 items-center justify-center rounded-full border border-red-500/30 bg-[#12121a] text-lg shadow-lg transition-all hover:scale-110 hover:border-red-500/60 md:bottom-4"
+        className="fixed right-4 top-3 z-[100] flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-base shadow-lg transition-all hover:scale-110 hover:shadow-[0_6px_28px_rgba(255,0,128,0.5)]"
+        style={{ background: 'linear-gradient(135deg, #ff0080 0%, #7928ca 100%)', boxShadow: '0 4px 20px rgba(255,0,128,0.3)' }}
         title="Report a bug"
       >
         🐛

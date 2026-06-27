@@ -17,10 +17,11 @@ export default {
       const isOnAuthPage = pathname.startsWith('/login') || pathname.startsWith('/register');
       const isApiRoute = pathname.startsWith('/api/');
       const isStaticAsset = pathname.startsWith('/_next/');
+      const isPublicRoute = pathname.startsWith('/meet');
 
       if (isInviteOnly) {
-        // INVITE-ONLY MODE — everything is locked except login page and API/assets
-        if (isApiRoute || isStaticAsset || pathname === '/terms') return true;
+        // INVITE-ONLY MODE — everything is locked except login page, /meet, and API/assets
+        if (isApiRoute || isStaticAsset || pathname === '/terms' || isPublicRoute) return true;
         if (isOnAuthPage) {
           if (isLoggedIn) return NextResponse.redirect(new URL('/messages', nextUrl));
           return true;
